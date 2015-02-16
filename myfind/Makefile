@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -pedantic -g
+CFLAGS = -Wall -Werror -Wextra -pedantic -g
 SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
@@ -9,8 +9,11 @@ default: all
 main: $(SRCDIR)/main.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/main.c -o $(OBJDIR)/main.o
 
-all: main
-	$(CC) $(OBJDIR)/main.o -o $(BINDIR)/myfind 
+parseopt: $(SRCDIR)/parseopt.h $(SRCDIR)/parseopt.c
+	$(CC) $(CFLAGS) -c $(SRCDIR)/parseopt.c -o $(OBJDIR)/parseopt.o	
+
+all: main parseopt
+	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o -o $(BINDIR)/myfind 
 
 clean: 
 	rm -f $(OBJDIR)/*.o 

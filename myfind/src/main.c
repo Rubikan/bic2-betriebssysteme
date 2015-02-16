@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include "parseopt.h"
 
 int main(int argc, char* argv[]) {
-	printf("HELLO WORLD!\n");
+	Options options;
+	parseopts(argc, argv, &options);
+
 	return 0;
 }
