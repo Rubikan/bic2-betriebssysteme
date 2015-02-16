@@ -10,10 +10,13 @@ main: $(SRCDIR)/main.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/main.c -o $(OBJDIR)/main.o
 
 parseopt: $(SRCDIR)/parseopt.h $(SRCDIR)/parseopt.c
-	$(CC) $(CFLAGS) -c $(SRCDIR)/parseopt.c -o $(OBJDIR)/parseopt.o	
+	$(CC) $(CFLAGS) -c $(SRCDIR)/parseopt.c -o $(OBJDIR)/parseopt.o
+
+link: 
+	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o -o $(BINDIR)/myfind	
 
 all: main parseopt
-	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o -o $(BINDIR)/myfind 
+	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o -o $(BINDIR)/myfind
 
 clean: 
-	rm -f $(OBJDIR)/*.o 
+	rm -f $(OBJDIR)/*.o
