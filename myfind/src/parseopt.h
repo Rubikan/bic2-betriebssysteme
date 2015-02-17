@@ -1,24 +1,17 @@
 #ifndef PARSEOPT_H
 #define PARSEOPT_H
 
-typedef struct Options {
-	// String-Variable die das Start-Directory speichert
-	char* start_dir;
-	// Integer-Variablen die speichern ob eine Aktion übergeben wurde
-	int print;
-	int ls;
-	int nouser;
-	int user;
-	int name;
-	int type;
-	int path;
-	// String-Variablen die Aktionsargumente speichern
-	char* suser;
-	char* sname;
-	char* stype;
-	char* spath;
-} Options;
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-void parseopts(int argc, char* argv[], Options* options);
+typedef struct Option {
+	char* name;
+	char* argument;
+	struct Option* next;
+} Option;
+
+void parseopts(int argc, char* argv[], Option* first);
+Option* create_option(char* optionname, char* argument);
 
 #endif

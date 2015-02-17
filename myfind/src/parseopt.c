@@ -1,53 +1,51 @@
-#include <stdio.h>
-#include <string.h>
 #include "parseopt.h"
 
-void parseopts(int argc, char* argv[], Options* options) {
-	int i;
-
-	if (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) {
-		options->start_dir = argv[1];
-		i = 2;
-	} else {
-		options->start_dir = ".";
-		i = 1;
-	}
-	options->print = 0;
-	options->ls = 0;
-	options->nouser = 0;
-	options->user = 0;
-	options->name = 0;
-	options->type = 0;
-	options->path = 0;
+void parseopts(int argc, char* argv[], Option* first) {
+	int i = (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? 2 : 1;
+	Option* current = first;
 
 	for (; i < argc; i++) {
 		if (strcmp("-user", argv[i]) == 0) {
-			options->user = 1;
-			options->suser = argv[++i];
+			current->next = create_option("-user", argv[++i]);
+			current = current->next;
 		}
 		else if (strcmp("-name", argv[i]) == 0) {
-			options->name = 1;
-			options->sname = argv[++i];
+			current->next = create_option("-name", argv[++i]);
+			current = current->next;
 		}
 		else if (strcmp("-type", argv[i]) == 0) {
-			options->type = 1;
-			options->stype = argv[++i];
+			current->next = create_option("-type", argv[++i]);
+			current = current->next;
 		}
 		else if (strcmp("-path", argv[i]) == 0) {
-			options->path = 1;
-			options->spath = argv[++i];
+			current->next = create_option("-path", argv[++i]);
+			current = current->next;
 		}
 		else if (strcmp("-print", argv[i]) == 0) {
-			options->print = 1;
+			current->next = create_option("-print", NULL);
+			current = current->next;
 		}
 		else if (strcmp("-ls", argv[i]) == 0) {
-			options->ls = 1;
+			current->next = create_option("-ls", NULL);
+			current = current->next;
 		}
 		else if (strcmp("-nouser", argv[i]) == 0) {
-			options->nouser = 1;
+			current->next = create_option("-nouser", NULL);
+			current = current->next;
 		}
 		else {
 			printf("%s ist keine gueltige Aktion!", argv[i]);
 		}
 	}
+}
+
+Option* create_option(char* optionname, char* argument) {
+	Option* option;
+
+	option = (Option *) malloc(sizeof(Option));
+	option->name = optionname;
+	option->argument = argument;
+	option->next = NULL;
+
+	return option;	
 }
