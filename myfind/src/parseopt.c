@@ -1,5 +1,14 @@
 #include "parseopt.h"
 
+/**
+ * \brief Parses the argv[] into a linked list of options.
+ *
+ * \param argc The number of arguments
+ * \param argv The arguments itselves (including the program name in argv[0])
+ * \param first Pointer to an option (the first option in the list)
+ *
+ * \return void
+ */
 void parseopts(int argc, char* argv[], Option* first) {
 	int i = (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? 2 : 1;
 	Option* current = first;
@@ -47,5 +56,5 @@ Option* create_option(char* optionname, char* argument) {
 	option->argument = argument;
 	option->next = NULL;
 
-	return option;	
+	return option;
 }
