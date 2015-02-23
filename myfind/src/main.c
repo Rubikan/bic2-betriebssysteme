@@ -10,6 +10,7 @@ void do_file(const char* file_name, Option* first);
 int main(int argc, char* argv[]) {
 	Option first;
 
+	//TODO: Falls kein Directory UND keine Options angegeben werden passiert ein Segfault
 	char* startdir = (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".";
 	parseopts(argc, argv, &first);
 
@@ -52,5 +53,5 @@ void do_dir(const char* dir_name, Option* first) {
 }
 
 void do_file(const char* file_name, Option* first) {
-
+	//TODO
 }
