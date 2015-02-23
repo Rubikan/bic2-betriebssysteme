@@ -27,12 +27,11 @@ void do_dir(const char* dir_name, Option* first) {
 	int status;
 
 	if (pDir == NULL) {
-		printf("Cannot open directory %s!\n", startdir);
-		return EXIT_FAILURE;
+		printf("Cannot open directory %s!\n", dir_name);
 	}
 
 	while ((pDirentry = readdir(pDir)) != NULL) {
-		strcpy(file, dirname);
+		strcpy(file, dir_name);
 		strcat(file, "/");
 		strcat(file, pDirentry->d_name);
 		status = stat(file, &pStat);
