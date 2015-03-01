@@ -17,73 +17,50 @@ void parseopts(int argc, char* argv[], Option* first) {
 
 	for (; i < argc; i++) {
 		if (strcmp("-user", argv[i]) == 0) {
-			if(current == NULL){
-				current = create_option("-user", argv[++i]);
-			} else {
-				current->next = create_option("-user", argv[++i]);
-				current = current->next;
-			}
+			current = create_option(current, "-user", argv[++i]);
+      current->next = (Option *) malloc(sizeof(Option));
+      current = current->next;
 		}
 		else if (strcmp("-name", argv[i]) == 0) {
-			if(current == NULL){
-				current = create_option("-name", argv[++i]);
-			} else {
-				current->next = create_option("-name", argv[++i]);
-				current = current->next;
-			}
+      current = create_option(current, "-name", argv[++i]);
+      current->next = (Option *) malloc(sizeof(Option));
+      current = current->next;
 		}
 		else if (strcmp("-type", argv[i]) == 0) {
-			if(current == NULL){
-				current = create_option("-type", argv[++i]);
-			} else {
-				current->next = create_option("-type", argv[++i]);
-				current = current->next;
-			}
+      current = create_option(current, "-type", argv[++i]);
+      current->next = (Option *) malloc(sizeof(Option));
+      current = current->next;
 		}
 		else if (strcmp("-path", argv[i]) == 0) {
-			if(current == NULL){
-				current = create_option("-path", argv[++i]);
-			} else {
-				current->next = create_option("-path", argv[++i]);
-				current = current->next;
-			}
+      current = create_option(current, "-path", argv[++i]);
+      current->next = (Option *) malloc(sizeof(Option));
+      current = current->next;
 		}
 		else if (strcmp("-print", argv[i]) == 0) {
-			if(current == NULL){
-				current = create_option("-print", NULL);
-			} else {
-				current->next = create_option("-print", NULL);
-				current = current->next;
-			}
+      current = create_option(current, "-print", NULL);
+      current->next = (Option *) malloc(sizeof(Option));
+      current = current->next;
 			default_print = 0;
 		}
 		else if (strcmp("-ls", argv[i]) == 0) {
-			if(current == NULL){
-				current = create_option("-ls", NULL);
-			} else {
-				current->next = create_option("-ls", NULL);
-				current = current->next;
-			}
+      current = create_option(current, "-ls", NULL);
+      current->next = (Option *) malloc(sizeof(Option));
+      current = current->next;
       default_print = 0;
 		}
 		else if (strcmp("-nouser", argv[i]) == 0) {
-			if(current == NULL){
-				current = create_option("-nouser", NULL);
-			} else {
-				current->next = create_option("-nouser", NULL);
-				current = current->next;
-			}
+      current = create_option(current, "-nouser", NULL);
+      current->next = (Option *) malloc(sizeof(Option));
+      current = current->next;
 		}
 		else {
 			printf("%s ist keine gueltige Aktion!\n", argv[i]);
 		}
+    current->next = NULL;
 	}
 }
 
-Option* create_option(char* optionname, char* argument) {
-	Option* option;
-
-	option = (Option *) malloc(sizeof(Option));
+Option* create_option(Option* option, char* optionname, char* argument) {
 	option->name = optionname;
 	option->argument = argument;
 	option->next = NULL;

@@ -12,6 +12,6 @@ typedef struct Option {
 } Option;
 
 void parseopts(int argc, char* argv[], Option* first);
-Option* create_option(char* optionname, char* argument);
+Option* create_option(Option* option, char* optionname, char* argument);
 
 #endif
