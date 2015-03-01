@@ -56,8 +56,8 @@ void parseopts(int argc, char* argv[], Option* first) {
 		else {
 			printf("%s ist keine gueltige Aktion!\n", argv[i]);
 		}
-    current->next = NULL;
 	}
+  current->next = NULL;
 }
 
 Option* create_option(Option* option, char* optionname, char* argument) {

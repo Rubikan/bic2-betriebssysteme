@@ -8,19 +8,22 @@ void do_dir(const char* dir_name, Option* first);
 void do_file(const char* file_name, Option* first);
 
 int main(int argc, char* argv[]) {
-	Option first;
+	Option* first = (Option *) malloc(sizeof(Option));
 
-	//TODO: Falls kein Directory UND keine Options angegeben werden passiert ein Segfault
+	//TODO: Falls kein Directory UND keine Options angegeben werden passiert ein Segfault.
+	//Generell muss der Teil hier noch stark überarbeitet werden, eine Directory Angabe in find
+	//muss nicht zwanghaft mit "." oder "/" anfangen.
 	char* startdir = (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".";
-	parseopts(argc, argv, &first);
+	parseopts(argc, argv, first);
 
-	do_dir(startdir, &first);
+	do_dir(startdir, first);
 
 	return EXIT_SUCCESS;
 }
 
 void do_dir(const char* dir_name, Option* first) {
 	DIR *pDir;
+	DIR *pSubDir;
 	pDir = opendir(dir_name);
 	struct dirent *pDirentry;
 	struct stat pStat;
@@ -41,17 +44,28 @@ void do_dir(const char* dir_name, Option* first) {
 			printf("ERROR: %s\n", strerror(errno));
 
 		if S_ISREG(pStat.st_mode) {
-				//TODO: Wenn es ein regular File ist.
+				do_file(file, first);
 		}
 
 		if S_ISDIR(pStat.st_mode) {
-				//TODO: Wenn es ein Directory ist.
+				printf("%s\n", dir_name);
+				//Überspringt das rekursive durchlaufen der . und .. Ordner
+				if (!(strncmp(pDirentry->d_name, ".", 1) == 0 || strncmp(pDirentry->d_name, "..", 2) == 0)) {
+					pSubDir = opendir(file);
+					do_dir(file, first);
+					closedir(pSubDir);
+				}
+			}
 		}
-	}
 
 	closedir(pDir);
 }
 
 void do_file(const char* file_name, Option* first) {
-	//TODO
+	struct stat pStat;
+	//Beinhaltet alle Informationen zu dem File
+	//Folien "Linux Filesystem" ab Seite 16.
+	stat(file_name, &pStat);
+
+	printf("%s\n", file_name);
 }
