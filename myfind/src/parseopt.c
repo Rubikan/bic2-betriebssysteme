@@ -10,10 +10,11 @@
  * \return void
  */
 
-void parse_options(int argc, char* argv[], Option* first) {
-	int i = (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? 2 : 1;
+int parse_options(int argc, char* argv[], Option* first) {
+	int i = (argv[1]==NULL ? 1 : (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? 2 : 1);
 	int default_print = 1;
 	Option* current = first;
+	int err=0;
 
 	for (; i < argc; i++) {
 		if (strcmp("-user", argv[i]) == 0) {
@@ -55,6 +56,7 @@ void parse_options(int argc, char* argv[], Option* first) {
 		}
 		else {
 			printf("%s ist keine gueltige Aktion!\n", argv[i]);
+			err=99;
 		}
 	}
 	if (default_print) {
@@ -63,6 +65,7 @@ void parse_options(int argc, char* argv[], Option* first) {
 		current = current->next;
 	}
   current->next = NULL;
+  return err;
 	/*TODO: In meinen Augen bleibt hier irgendwo eine Node am Ende herumhängen.*/
 	/*Aber bei Tests wo ich über alle Optionen durchiteriere und sie ausgehe gibt*/
 	/*es keine Probleme. GGF noch schauen ob es Probleme gibt.*/
