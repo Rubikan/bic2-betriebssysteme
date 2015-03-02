@@ -14,10 +14,11 @@ int main(int argc, char* argv[]) {
 	//Generell muss der Teil hier noch stark überarbeitet werden, eine Directory Angabe in find
 	//muss nicht zwanghaft mit "." oder "/" anfangen.
 	char* startdir = (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".";
-	parseopts(argc, argv, first);
+	parse_options(argc, argv, first);
 
 	do_dir(startdir, first);
 
+	free_options(first);
 	return EXIT_SUCCESS;
 }
 
@@ -62,10 +63,15 @@ void do_dir(const char* dir_name, Option* first) {
 }
 
 void do_file(const char* file_name, Option* first) {
+	Option* current = first;
 	struct stat pStat;
 	//Beinhaltet alle Informationen zu dem File
 	//Folien "Linux Filesystem" ab Seite 16.
 	stat(file_name, &pStat);
 
-	printf("%s\n", file_name);
+	while(current->next != NULL) {
+		if (strncmp(current->name, "-print", 6) == 0)
+			printf("%s\n", file_name);
+		current = current->next;
+	}
 }
