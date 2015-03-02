@@ -1,6 +1,5 @@
 CC = gcc
-CFLAGS_BETTER = -Wall -Werror -Wextra -pedantic -g
-CFLAGS = -Wall
+CFLAGS = -Wall -Werror -Wextra -Wstrict-prototypes -pedantic -fno-common -g -O3
 SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
@@ -13,11 +12,14 @@ main: $(SRCDIR)/main.c
 parseopt: $(SRCDIR)/parseopt.h $(SRCDIR)/parseopt.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/parseopt.c -o $(OBJDIR)/parseopt.o
 
-link:
-	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o -o $(BINDIR)/myfind
-
 all: main parseopt
 	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o -o $(BINDIR)/myfind
+
+valgrind:
+	valgrind --leak-check=full ./bin/myfind . -nouser -name test
+
+valgrind-verbose:
+	valgrind --leak-check=full -v ./bin/myfind . -nouser -name test
 
 clean:
 	rm -f $(OBJDIR)/*.o
