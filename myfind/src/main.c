@@ -39,7 +39,6 @@ void do_dir(const char* dir_path, Option* first) {
 	if (pDir == NULL) {
 		printf("Cannot open directory %s!\n", dir_path);
 	} else {
-		printf("%s\n", dir_path);
 		while ((pDirentry = readdir(pDir)) != NULL) {
 			strcpy(file, dir_path);
 			strcat(file, "/");
@@ -50,6 +49,7 @@ void do_dir(const char* dir_path, Option* first) {
 				printf("ERROR: %s\n", strerror(errno));
 
 			if S_ISDIR(pStat.st_mode) {
+				do_file(file, first);
 				/*Überspringt das rekursive durchlaufen der . und .. Ordner*/
 				if (!(strncmp(pDirentry->d_name, ".", 1) == 0 || strncmp(pDirentry->d_name, "..", 2) == 0)) {
 					pSubDir = opendir(file);
