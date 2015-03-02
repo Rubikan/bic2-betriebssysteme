@@ -9,14 +9,17 @@ void do_file(const char* file_name, Option* first);
 
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
+	int parsErr=0;
 
 	/*TODO: Falls kein Directory UND keine Options angegeben werden passiert ein Segfault.*/
 	/*Generell muss der Teil hier noch stark überarbeitet werden, eine Directory Angabe in find*/
 	/*muss nicht zwanghaft mit "." oder "/" anfangen.*/
-	char* startdir = (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".";
-	parse_options(argc, argv, first);
+	char* startdir = (argv[1]!=NULL) ? ((strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".") : ".";
+	parsErr=parse_options(argc, argv, first);
 
-	do_dir(startdir, first);
+	if(!parsErr){
+		do_dir(startdir, first);
+	}
 
 	free_options(first);
 	return EXIT_SUCCESS;
@@ -33,23 +36,18 @@ void do_dir(const char* dir_name, Option* first) {
 
 	if (pDir == NULL) {
 		printf("Cannot open directory %s!\n", dir_name);
-	}
+	}else{
+		printf("%s\n", dir_name);
+		while ((pDirentry = readdir(pDir)) != NULL) {
+			strcpy(file, dir_name);
+			strcat(file, "/");
+			strcat(file, pDirentry->d_name);
+			status = stat(file, &pStat);
 
-	while ((pDirentry = readdir(pDir)) != NULL) {
-		strcpy(file, dir_name);
-		strcat(file, "/");
-		strcat(file, pDirentry->d_name);
-		status = stat(file, &pStat);
+			if(status == -1)
+				printf("ERROR: %s\n", strerror(errno));
 
-		if(status == -1)
-			printf("ERROR: %s\n", strerror(errno));
-
-		if S_ISREG(pStat.st_mode) {
-				do_file(file, first);
-		}
-
-		if S_ISDIR(pStat.st_mode) {
-				printf("%s\n", dir_name);
+			if S_ISDIR(pStat.st_mode) {
 				/*Überspringt das rekursive durchlaufen der . und .. Ordner*/
 				if (!(strncmp(pDirentry->d_name, ".", 1) == 0 || strncmp(pDirentry->d_name, "..", 2) == 0)) {
 					pSubDir = opendir(file);
@@ -57,7 +55,11 @@ void do_dir(const char* dir_name, Option* first) {
 					closedir(pSubDir);
 				}
 			}
+			if S_ISREG(pStat.st_mode) {
+				do_file(file, first);
+			}
 		}
+	}
 
 	closedir(pDir);
 }
