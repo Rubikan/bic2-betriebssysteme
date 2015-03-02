@@ -63,9 +63,9 @@ void parse_options(int argc, char* argv[], Option* first) {
 		current = current->next;
 	}
   current->next = NULL;
-	//TODO: In meinen Augen bleibt hier irgendwo eine Node am Ende herumhängen.
-	//Aber bei Tests wo ich über alle Optionen durchiteriere und sie ausgehe gibt
-	//es keine Probleme. GGF noch schauen ob es Probleme gibt.
+	/*TODO: In meinen Augen bleibt hier irgendwo eine Node am Ende herumhängen.*/
+	/*Aber bei Tests wo ich über alle Optionen durchiteriere und sie ausgehe gibt*/
+	/*es keine Probleme. GGF noch schauen ob es Probleme gibt.*/
 }
 
 Option* create_option(Option* option, char* optionname, char* argument) {
