@@ -23,3 +23,6 @@ valgrind-verbose:
 
 clean:
 	rm -f $(OBJDIR)/*.o
+
+debug: main parseopt
+	$(CC) -g $(OBJDIR)/main.o $(OBJDIR)/parseopt.o -o $(BINDIR)/myfind
