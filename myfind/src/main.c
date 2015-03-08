@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <libgen.h>
 #include <fnmatch.h>
+#include <pwd.h>
 #include "parseopt.h"
 
 void do_dir(const char* dir_path, Option* first);
@@ -83,11 +84,15 @@ void do_file(const char* file_path, Option* first) {
 	/*Den Filename für die Namensüberprüfung extrahieren mit basename()*/
 	char* temp = malloc(strlen(file_path)+1);
 	char* file_name = NULL;
+	struct stat pStat;
+	char *time;
+	size_t max=50;
+	/*MM DD HH:MI*/
+	const char *format="%b %d H:M";
 	strcpy(temp, file_path);
 	file_name = basename(temp);
 	/*Beinhaltet alle Informationen zu dem File*/
 	/*Folien "Linux Filesystem" ab Seite 16.*/
-	struct stat pStat;
 	stat(file_path, &pStat);
 
 	while(current->next != NULL) {
@@ -95,13 +100,30 @@ void do_file(const char* file_path, Option* first) {
 			if (fnmatch(current->argument, file_name, 0) == FNM_NOMATCH) {
 				break;
 			}
-		}
-		else if (strncmp(current->name, "-print", 6) == 0) {
+		}else if (strncmp(current->name, "-print", 6) == 0) {
 			printf("%s\n", file_path);
 		}else if (strncmp(current->name, "-ls", 6) == 0) {
-			//printf für -ls eingefügt
-			//TODO: übergabeparameter für -ls festlegen
-			printf("%8d %4d %s %4d %s    %s %8d %s %s\n", );
+			/*printf für -ls eingefügt*/
+			/*TODO: übergabeparameter für -ls festlegen*/
+			/*Nummer des Inodes, Anzahl der Blocks, Permissions, 
+			Anzahl der Links, Owner, Group, Last Modification Time 
+			und den Namen des Directoryeintrags */
+			/*strftime(time, max, format, pStat.st_mtime);*/
+			printf("%8lu %4d %s %4d %s    %s %8d %s %s\n", pStat.st_ino,0,"",0,"","",0,"","");
+			/*strftime(char *s, size_t max, const char *format,
+                       const struct tm *tm);*/
+		}else if (strncmp(current->name, "-user", 6) == 0) {
+			if(current->argument == getpwnam()){
+				
+			}
+		}else if (strncmp(current->name, "-type", 6) == 0) {
+			printf("%s\n", file_path);
+		}else if (strncmp(current->name, "-nouser", 6) == 0) {
+			printf("%s\n", file_path);
+		}else if (strncmp(current->name, "-path", 6) == 0) {
+			if (fnmatch(current->argument, file_path, 0) == FNM_NOMATCH) {
+				break;
+			}
 		}
 		current = current->next;
 	}
