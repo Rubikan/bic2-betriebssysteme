@@ -21,6 +21,18 @@ int main(int argc, char* argv[]) {
 
 	if(!parsErr){
 		do_dir(startdir, first);
+	}else{
+		printf("\nDie Eingabe wurde nicht erkannt\n");
+		printf("Bitte rufen Sie myfind wie folgt auf: \n");
+		printf("myfind <directory> [ <aktion> ] ...\n");
+		printf("Moegliche aktionen\n");
+		printf("'-user'\n");
+		printf("'-name'\n");
+		printf("'-type'\n");
+		printf("'-print'\n");
+		printf("'-ls'\n");
+		printf("'-nouser'\n");
+		printf("'-path'\n");
 	}
 
 	free_options(first);
