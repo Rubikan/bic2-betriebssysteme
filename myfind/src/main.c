@@ -98,6 +98,10 @@ void do_file(const char* file_path, Option* first) {
 		}
 		else if (strncmp(current->name, "-print", 6) == 0) {
 			printf("%s\n", file_path);
+		}else if (strncmp(current->name, "-ls", 6) == 0) {
+			//printf für -ls eingefügt
+			//TODO: übergabeparameter für -ls festlegen
+			printf("%8d %4d %s %4d %s    %s %8d %s %s\n", );
 		}
 		current = current->next;
 	}
