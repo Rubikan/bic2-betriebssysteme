@@ -9,7 +9,7 @@
 
 void do_dir(const char* dir_path, Option* first);
 void do_file(const char* file_path, Option* first);
-void print_if_type(char type, char* file_path, struct stat pStat);
+void print_if_type(char type, const char* file_path, struct stat pStat);
 
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
@@ -129,7 +129,7 @@ void do_file(const char* file_path, Option* first) {
 				break;
 			}
 		}else if (strncmp(current->name, "-type", 5) == 0) {
-			print_if_type(current->argument[0], file_name, pStat);
+			print_if_type(current->argument[0], file_path, pStat);
 		}else if (strncmp(current->name, "-nouser", 7) == 0) {
 			printf("%s\n", file_path);
 		}else if (strncmp(current->name, "-path", 5) == 0) {
@@ -141,7 +141,7 @@ void do_file(const char* file_path, Option* first) {
 	}
 }
 
-void print_if_type(char type, char* file_path, struct stat pStat) {
+void print_if_type(char type, const char* file_path, struct stat pStat) {
 		switch(type) {
 			case 'b':
 				if S_ISBLK(pStat.st_mode)
