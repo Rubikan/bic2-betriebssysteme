@@ -113,7 +113,7 @@ void do_file(const char* file_path, Option* first) {
 			Anzahl der Links, Owner, Group, Last Modification Time
 			und den Namen des Directoryeintrags */
 			/*strftime(time, max, format, pStat.st_mtime);*/
-			printf("%8lu %4d %s %4d %s    %s %8d %s %s\n", (unsigned long)pStat.st_ino,0,"",0,"","",0,"","");
+			printf("%ld %lld %s %ld %ld %ld %s %s\n", (long) pStat.st_ino, (long long) pStat.st_blocks,"", (long) pStat.st_nlink, (long) pStat.st_uid, (long) pStat.st_gid,ctime(&pStat.st_mtime), file_name);
 			/*strftime(char *s, size_t max, const char *format, const struct tm *tm);*/
 		}else if (strncmp(current->name, "-user", 6) == 0) {
 			userInfo=getpwuid(pStat.st_uid);
