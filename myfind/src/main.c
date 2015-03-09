@@ -5,6 +5,7 @@
 #include <libgen.h>
 #include <fnmatch.h>
 #include <pwd.h>
+#include <time.h>
 #include "parseopt.h"
 
 void do_dir(const char* dir_path, Option* first);
@@ -113,7 +114,7 @@ void do_file(const char* file_path, Option* first) {
 			Anzahl der Links, Owner, Group, Last Modification Time
 			und den Namen des Directoryeintrags */
 			/*strftime(time, max, format, pStat.st_mtime);*/
-			printf("%ld %lld %s %ld %ld %ld %s %s\n", (long) pStat.st_ino, (long long) pStat.st_blocks,"", (long) pStat.st_nlink, (long) pStat.st_uid, (long) pStat.st_gid,ctime(&pStat.st_mtime), file_name);
+			printf("%ld %ld %s %ld %ld %ld %s %s\n", (long) pStat.st_ino, (long) pStat.st_blocks,"", (long) pStat.st_nlink, (long) pStat.st_uid, (long) pStat.st_gid,ctime(&pStat.st_mtime), file_name);
 			/*strftime(char *s, size_t max, const char *format, const struct tm *tm);*/
 		}else if (strncmp(current->name, "-user", 6) == 0) {
 			userInfo=getpwuid(pStat.st_uid);
