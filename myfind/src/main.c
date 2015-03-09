@@ -88,7 +88,7 @@ void do_file(const char* file_path, Option* first) {
 	struct stat pStat;
 	char* username;
 	struct passwd* userInfo;
-	char uid[50];
+	long uid;
 	/*char *time;
 	size_t max=50;*/
 	/*MM DD HH:MI*/
@@ -124,9 +124,11 @@ void do_file(const char* file_path, Option* first) {
 			if(username==NULL){
 				break;
 			}
-			sprintf(uid,"%lu",(long)pStat.st_uid);
-			if((strncmp(username, current->argument,50)!=0) || (strncmp(uid, current->argument,50)!=0)){
-				break;
+			uid=strtol(current->argument,NULL,10);
+			if((strncmp(username, current->argument,50)!=0)){
+				if(uid!=(long)pStat.st_uid){
+					break;
+				}
 			}
 		}else if (strncmp(current->name, "-type", 5) == 0) {
 			print_if_type(current->argument[0], file_path, pStat);
