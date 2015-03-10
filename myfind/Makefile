@@ -12,11 +12,11 @@ main: $(SRCDIR)/main.c
 parseopt: $(SRCDIR)/parseopt.h $(SRCDIR)/parseopt.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/parseopt.c -o $(OBJDIR)/parseopt.o
 
-printers: $(SRCDIR)/printers.h $(SRCDIR)/printers.c
-	$(CC) $(CFLAGS) -c $(SRCDIR)/printers.c -o $(OBJDIR)/printers.o
+checks: $(SRCDIR)/checks.h $(SRCDIR)/checks.c
+	$(CC) $(CFLAGS) -c $(SRCDIR)/checks.c -o $(OBJDIR)/checks.o
 
-all: main parseopt printers
-	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o $(OBJDIR)/printers.o -o $(BINDIR)/myfind
+all: main parseopt checks
+	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o $(OBJDIR)/checks.o -o $(BINDIR)/myfind
 
 valgrind:
 	valgrind --leak-check=full ./bin/myfind . -nouser -name test

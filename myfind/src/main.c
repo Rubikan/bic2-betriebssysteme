@@ -6,7 +6,7 @@
 #include <pwd.h>
 #include <time.h>
 #include "parseopt.h"
-#include "printers.h"
+#include "checks.h"
 
 void do_dir(const char* dir_path, Option* first);
 void do_file(const char* file_path, Option* first);
@@ -86,9 +86,6 @@ void do_file(const char* file_path, Option* first) {
 	char* temp = malloc(strlen(file_path)+1);
 	char* file_name = NULL;
 	struct stat pStat;
-	char* username;
-	struct passwd* userInfo;
-	long uid;
 	/*char *time;
 	size_t max=50;*/
 	/*MM DD HH:MI*/
@@ -101,10 +98,29 @@ void do_file(const char* file_path, Option* first) {
 
 	while(current->next != NULL) {
 		if (strncmp(current->name, "-name", 5) == 0) {
-			print_if_name(file_name, file_path, current->argument);
-		}else if (strncmp(current->name, "-print", 6) == 0) {
+			if (check_name(file_name, current->argument) == 0)
+				break;
+		}
+		else if (strncmp(current->name, "-user", 6) == 0) {
+			if (check_user(pStat, current->argument) == 0)
+				break;
+		}
+		else if (strncmp(current->name, "-type", 5) == 0) {
+			if (check_type(pStat, current->argument[0]) == 0)
+				break;
+		}
+		else if (strncmp(current->name, "-nouser", 7) == 0) {
+			if (check_nouser(pStat) == 0)
+				break;
+		}
+		else if (strncmp(current->name, "-path", 5) == 0) {
+			if (check_path(file_path, current->argument) == 0)
+				break;
+		}
+		else if (strncmp(current->name, "-print", 6) == 0) {
 			printf("%s\n", file_path);
-		}else if (strncmp(current->name, "-ls", 3) == 0) {
+		}
+		else if (strncmp(current->name, "-ls", 3) == 0) {
 			/*printf für -ls eingefügt*/
 			/*TODO: übergabeparameter für -ls festlegen*/
 			/*Nummer des Inodes, Anzahl der Blocks, Permissions,
@@ -113,27 +129,6 @@ void do_file(const char* file_path, Option* first) {
 			/*strftime(time, max, format, pStat.st_mtime);*/
 			printf("%ld %ld %s %ld %ld %ld %s %s\n", (long) pStat.st_ino, (long) pStat.st_blocks,"", (long) pStat.st_nlink, (long) pStat.st_uid, (long) pStat.st_gid,ctime(&pStat.st_mtime), file_name);
 			/*strftime(char *s, size_t max, const char *format, const struct tm *tm);*/
-		}else if (strncmp(current->name, "-user", 6) == 0) {
-			userInfo=getpwuid(pStat.st_uid);
-			if(userInfo==NULL){
-				break;
-			}
-			username=userInfo->pw_name;
-			if(username==NULL){
-				break;
-			}
-			uid=strtol(current->argument,NULL,10);
-			if((strncmp(username, current->argument,50)!=0)){
-				if(uid!=(long)pStat.st_uid){
-					break;
-				}
-			}
-		}else if (strncmp(current->name, "-type", 5) == 0) {
-			print_if_type(file_path, pStat, current->argument[0]);
-		}else if (strncmp(current->name, "-nouser", 7) == 0) {
-			print_if_nouser(file_path, pStat);
-		}else if (strncmp(current->name, "-path", 5) == 0) {
-			print_if_path(file_path, current->argument);
 		}
 		current = current->next;
 	}
