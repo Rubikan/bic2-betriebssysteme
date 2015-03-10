@@ -1,6 +1,6 @@
 #include "printers.h"
 
-void print_if_type(const char* file_path, char type, struct stat pStat) {
+void print_if_type(const char* file_path, struct stat pStat, char type) {
 		switch(type) {
 			case 'b':
 				if S_ISBLK(pStat.st_mode)
@@ -43,4 +43,10 @@ void print_if_nouser(const char* file_path, struct stat pStat) {
 	if (userInfo == NULL){
 		printf("%s\n", file_path);
 	}
+}
+
+void print_if_path(const char* file_path, char* arg_pattern) {
+  if (fnmatch(arg_pattern, file_path, 0) == 0) {
+    printf("%s\n", file_path);
+  }
 }

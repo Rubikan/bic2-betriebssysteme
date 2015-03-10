@@ -3,7 +3,6 @@
 #include <string.h>
 #include <errno.h>
 #include <libgen.h>
-#include <fnmatch.h>
 #include <pwd.h>
 #include <time.h>
 #include "parseopt.h"
@@ -132,13 +131,11 @@ void do_file(const char* file_path, Option* first) {
 				}
 			}
 		}else if (strncmp(current->name, "-type", 5) == 0) {
-			print_if_type(file_path, current->argument[0], pStat);
+			print_if_type(file_path, pStat, current->argument[0]);
 		}else if (strncmp(current->name, "-nouser", 7) == 0) {
 			print_if_nouser(file_path, pStat);
 		}else if (strncmp(current->name, "-path", 5) == 0) {
-			if (fnmatch(current->argument, file_path, 0) == FNM_NOMATCH) {
-				break;
-			}
+			print_if_path(file_path, current->argument);
 		}
 		current = current->next;
 	}
