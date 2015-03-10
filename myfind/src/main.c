@@ -132,7 +132,7 @@ void do_file(const char* file_path, Option* first) {
 				}
 			}
 		}else if (strncmp(current->name, "-type", 5) == 0) {
-			print_if_type(current->argument[0], file_path, pStat);
+			print_if_type(file_path, current->argument[0], pStat);
 		}else if (strncmp(current->name, "-nouser", 7) == 0) {
 			print_if_nouser(file_path, pStat);
 		}else if (strncmp(current->name, "-path", 5) == 0) {
