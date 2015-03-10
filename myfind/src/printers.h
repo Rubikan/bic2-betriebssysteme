@@ -10,6 +10,7 @@
 
 void print_if_type(const char* file_path, struct stat pStat, char type);
 void print_if_nouser(const char* file_path, struct stat pStat);
-void print_if_path(const char* file_path, char* arg_path);
+void print_if_name(const char* file_name, const char* file_path, char* arg_pattern);
+void print_if_path(const char* file_path, char* arg_pattern);
 
 #endif

@@ -101,9 +101,7 @@ void do_file(const char* file_path, Option* first) {
 
 	while(current->next != NULL) {
 		if (strncmp(current->name, "-name", 5) == 0) {
-			if (fnmatch(current->argument, file_name, 0) == FNM_NOMATCH) {
-				break;
-			}
+			print_if_name(file_name, file_path, current->argument);
 		}else if (strncmp(current->name, "-print", 6) == 0) {
 			printf("%s\n", file_path);
 		}else if (strncmp(current->name, "-ls", 3) == 0) {

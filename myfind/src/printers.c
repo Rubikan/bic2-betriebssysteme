@@ -45,6 +45,12 @@ void print_if_nouser(const char* file_path, struct stat pStat) {
 	}
 }
 
+void print_if_name(const char* file_name, const char* file_path, char* arg_pattern) {
+  if (fnmatch(arg_pattern, file_name, 0) == 0) {
+    printf("%s\n", file_path);
+  }
+}
+
 void print_if_path(const char* file_path, char* arg_pattern) {
   if (fnmatch(arg_pattern, file_path, 0) == 0) {
     printf("%s\n", file_path);
