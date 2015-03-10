@@ -7,10 +7,10 @@
 #include <pwd.h>
 #include <time.h>
 #include "parseopt.h"
+#include "printers.h"
 
 void do_dir(const char* dir_path, Option* first);
 void do_file(const char* file_path, Option* first);
-void print_if_type(char type, const char* file_path, struct stat pStat);
 
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
@@ -134,7 +134,7 @@ void do_file(const char* file_path, Option* first) {
 		}else if (strncmp(current->name, "-type", 5) == 0) {
 			print_if_type(current->argument[0], file_path, pStat);
 		}else if (strncmp(current->name, "-nouser", 7) == 0) {
-			printf("%s\n", file_path);
+			print_if_nouser(file_path, pStat);
 		}else if (strncmp(current->name, "-path", 5) == 0) {
 			if (fnmatch(current->argument, file_path, 0) == FNM_NOMATCH) {
 				break;
@@ -142,40 +142,4 @@ void do_file(const char* file_path, Option* first) {
 		}
 		current = current->next;
 	}
-}
-
-void print_if_type(char type, const char* file_path, struct stat pStat) {
-		switch(type) {
-			case 'b':
-				if S_ISBLK(pStat.st_mode)
-					printf("%s\n", file_path);
-				break;
-			case 'c':
-				if S_ISCHR(pStat.st_mode)
-					printf("%s\n", file_path);
-				break;
-			case 'd':
-				if S_ISDIR(pStat.st_mode)
-					printf("%s\n", file_path);
-				break;
-			case 'p':
-				if S_ISFIFO(pStat.st_mode)
-					printf("%s\n", file_path);
-				break;
-			case 'f':
-				if S_ISREG(pStat.st_mode)
-					printf("%s\n", file_path);
-				break;
-			case 'l':
-				if S_ISLNK(pStat.st_mode)
-					printf("%s\n", file_path);
-				break;
-			case 's':
-				if S_ISSOCK(pStat.st_mode)
-					printf("%s\n", file_path);
-				break;
-			default:
-				printf("find: Unbekanntes Argument von -type: %c\n", type);
-				break;
-		}
 }
