@@ -9,7 +9,6 @@
  *
  * \return void
  */
-
 int parse_options(int argc, char* argv[], Option* first) {
 	int i = (argv[1]==NULL ? 1 : (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? 2 : 1);
 	int default_print = 1;
@@ -71,6 +70,15 @@ int parse_options(int argc, char* argv[], Option* first) {
 	/*es keine Probleme. GGF noch schauen ob es Probleme gibt.*/
 }
 
+/**
+ * \brief Fills a given Option struct with the needed values
+ *
+ * \param option Pointer to Option struct that should be filled
+ * \param optionname Name the option should have (eg. -user)
+ * \param argument Argument of the option. If no argument is needed (eg. -nouser) then
+ *
+ * \return Pointer to the option struct
+ */
 Option* create_option(Option* option, char* optionname, char* argument) {
 	option->name = optionname;
 	option->argument = argument;
@@ -79,6 +87,13 @@ Option* create_option(Option* option, char* optionname, char* argument) {
 	return option;
 }
 
+/**
+ * \brief Iterates over the Option linked list and frees the memory.
+ *
+ * \param first Pointer to the first Option in the linked list of Options
+ *
+ * \return void
+ */
 void free_options(Option* first) {
 	Option* next;
 
