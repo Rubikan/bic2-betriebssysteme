@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <libgen.h>
 #include <pwd.h>
+#include <grp.h>
 #include <time.h>
 #include "parseopt.h"
 #include "checks.h"
@@ -93,15 +94,20 @@ void do_file(const char* file_path, Option* first) {
 	char* temp = malloc(strlen(file_path)+1);
 	char* file_name = NULL;
 	struct stat pStat;
-	/*char *time;
-	size_t max=50;*/
-	/*MM DD HH:MI*/
-	/*const char *format="%b %d H:M";*/
 	strcpy(temp, file_path);
 	file_name = basename(temp);
 	/*Beinhaltet alle Informationen zu dem File*/
 	/*Folien "Linux Filesystem" ab Seite 16.*/
 	stat(file_path, &pStat);
+	/*Benutzernamen und Gruppennamen für -ls*/
+	char* username;
+	char* groupname;
+	struct passwd* userInfo;
+	struct group* groupInfo;
+	/*Zeit für -ls*/
+	char format_date[200];
+	time_t lastmod_time;
+  struct tm* temp_time;
 
 	while(current->next != NULL) {
 		if (strncmp(current->name, "-name", 5) == 0) {
@@ -128,14 +134,20 @@ void do_file(const char* file_path, Option* first) {
 			printf("%s\n", file_path);
 		}
 		else if (strncmp(current->name, "-ls", 3) == 0) {
-			/*printf für -ls eingefügt*/
-			/*TODO: übergabeparameter für -ls festlegen*/
-			/*Nummer des Inodes, Anzahl der Blocks, Permissions,
-			Anzahl der Links, Owner, Group, Last Modification Time
-			und den Namen des Directoryeintrags */
-			/*strftime(time, max, format, pStat.st_mtime);*/
-			printf("%ld %ld", (long) pStat.st_ino, (long) pStat.st_blocks);
-			printf(" ");
+			/*Benutzername und Gruppenname auslesen*/
+			userInfo = getpwuid(pStat.st_uid);
+			groupInfo = getgrgid(pStat.st_gid);
+			username = userInfo->pw_name;
+			groupname = groupInfo->gr_name;
+			/*Formatierten Zeit-String erzeugen*/
+			lastmod_time = pStat.st_mtime;
+      temp_time = localtime(&lastmod_time);
+			if (strftime(format_date, sizeof(format_date), "%b %d %H:%M ", temp_time) == 0) {
+        fprintf(stderr, "strftime returned 0");
+      	exit(EXIT_FAILURE);
+      }
+
+			printf("%ld %5ld ", (long) pStat.st_ino, (long) pStat.st_blocks);
 			printf((S_ISDIR(pStat.st_mode)) ? "d" : "-");
 			printf((pStat.st_mode & S_IRUSR) ? "r" : "-");
 			printf((pStat.st_mode & S_IWUSR) ? "w" : "-");
@@ -146,7 +158,7 @@ void do_file(const char* file_path, Option* first) {
 			printf((pStat.st_mode & S_IROTH) ? "r" : "-");
 			printf((pStat.st_mode & S_IWOTH) ? "w" : "-");
 			printf((pStat.st_mode & S_IXOTH) ? "x" : "-");
-			printf("%ld %ld %ld %s %s\n", (long) pStat.st_nlink, (long) pStat.st_uid, (long) pStat.st_gid,ctime(&pStat.st_mtime), file_name);
+			printf("%4ld %s %s %9ld %s %s\n", (long) pStat.st_nlink, username, groupname, (long) pStat.st_size,format_date, file_path);
 			/*strftime(char *s, size_t max, const char *format, const struct tm *tm);*/
 		}
 		current = current->next;
