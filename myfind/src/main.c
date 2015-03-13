@@ -1,3 +1,18 @@
+/**
+ *
+ * @file main.c
+ * Betriebssysteme Betriebssysteme myfind File.
+ * Beispiel 1
+ *
+ * @author Andreas Rubik <andreas.rubik@technikum-wien.at>
+ * @author Anna Glock <ic14b070@technikum-wien.at>
+ * @author Anna Huka <ic14b043@technikum-wien.at>
+ *
+ * @version 1.0
+ * @date 2015/03/13
+ *
+ */
+
 #include <sys/stat.h>
 #include <dirent.h>
 #include <string.h>
@@ -14,7 +29,7 @@ void do_file(const char* file_path, Option* first);
 void print_usage(void);
 
 /**
- * \brief main method of myfind 
+ * \brief main method of myfind
  * 		  calls parse_options and do_dir
  *
  * \return success if no option was wrong
@@ -22,7 +37,7 @@ void print_usage(void);
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
 	int parsErr=0;
-	
+
 	char* startdir = (argv[1]!=NULL) ? ((strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".") : ".";
 	parsErr = parse_options(argc, argv, first);
 
@@ -45,7 +60,7 @@ int main(int argc, char* argv[]) {
 }
 
 /**
- * \brief interrates through file directory's if dir_path is an dir 
+ * \brief interrates through file directory's if dir_path is an dir
  *			if not it call the function do_file
  *
  * \param dir_path path to file
@@ -99,7 +114,7 @@ void do_dir(const char* dir_path, Option* first) {
 }
 
 /**
- * \brief checks all options for file 
+ * \brief checks all options for file
  *			if the file doesn't pass the checks the method stops the checking
  *
  * \param file_path path to file
