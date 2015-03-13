@@ -159,7 +159,7 @@ void do_file(const char* file_path, Option* first) {
 			printf((pStat.st_mode & S_IROTH) ? "r" : "-");
 			printf((pStat.st_mode & S_IWOTH) ? "w" : "-");
 			printf((pStat.st_mode & S_IXOTH) ? "x" : "-");
-			printf("%4ld %s %8s %11ld %s %s\n", (long) pStat.st_nlink, username, groupname, (long) pStat.st_size,format_date, file_path);
+			printf("%4ld %s %8s %8ld %s %s\n", (long) pStat.st_nlink, username, groupname, (long) pStat.st_size,format_date, file_path);
 		}
 		current = current->next;
 	}
