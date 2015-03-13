@@ -28,10 +28,9 @@ int main(int argc, char* argv[]) {
 			do_dir(startdir, first);
 			break;
 		case 98:
-
 			break;
 		case 99:
-			print_usage(1);
+			print_usage();
 			break;
 	}
 	if (parsErr) {
