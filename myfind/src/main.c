@@ -129,7 +129,19 @@ void do_file(const char* file_path, Option* first) {
 			Anzahl der Links, Owner, Group, Last Modification Time
 			und den Namen des Directoryeintrags */
 			/*strftime(time, max, format, pStat.st_mtime);*/
-			printf("%ld %ld %s %ld %ld %ld %s %s\n", (long) pStat.st_ino, (long) pStat.st_blocks,"", (long) pStat.st_nlink, (long) pStat.st_uid, (long) pStat.st_gid,ctime(&pStat.st_mtime), file_name);
+			printf("%ld %ld", (long) pStat.st_ino, (long) pStat.st_blocks);
+			printf(" ");
+			printf((S_ISDIR(pStat.st_mode)) ? "d" : "-");
+			printf((pStat.st_mode & S_IRUSR) ? "r" : "-");
+			printf((pStat.st_mode & S_IWUSR) ? "w" : "-");
+			printf((pStat.st_mode & S_IXUSR) ? "x" : "-");
+			printf((pStat.st_mode & S_IRGRP) ? "r" : "-");
+			printf((pStat.st_mode & S_IWGRP) ? "w" : "-");
+			printf((pStat.st_mode & S_IXGRP) ? "x" : "-");
+			printf((pStat.st_mode & S_IROTH) ? "r" : "-");
+			printf((pStat.st_mode & S_IWOTH) ? "w" : "-");
+			printf((pStat.st_mode & S_IXOTH) ? "x" : "-");
+			printf("%ld %ld %ld %s %s\n", (long) pStat.st_nlink, (long) pStat.st_uid, (long) pStat.st_gid,ctime(&pStat.st_mtime), file_name);
 			/*strftime(char *s, size_t max, const char *format, const struct tm *tm);*/
 		}
 		current = current->next;
