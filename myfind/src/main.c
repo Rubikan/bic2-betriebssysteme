@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
  * \param first first Option in the Optionslist
  *
  * \return nothing
-*/
+ */
 void do_dir(const char* dir_path, Option* first) {
 	DIR *pDir;
 	DIR *pSubDir;
@@ -201,7 +201,7 @@ void do_file(const char* file_path, Option* first) {
  *  \brief prints the usage of myfind
  *
  * \return nothing
-*/
+ *
  */
 void print_usage(void) {
 	printf("\nDie Eingabe wurde nicht erkannt\n");
