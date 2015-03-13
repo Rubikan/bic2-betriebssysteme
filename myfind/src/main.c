@@ -10,7 +10,7 @@
 
 void do_dir(const char* dir_path, Option* first);
 void do_file(const char* file_path, Option* first);
-void print_usage();
+void print_usage(int a);
 
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 		case 98:
 			break;
 		case 99:
-			print_usage();
+			print_usage(1);
 			break;
 	}
 	if (parsErr) {
@@ -153,7 +153,8 @@ void do_file(const char* file_path, Option* first) {
 	}
 }
 
-void print_usage() {
+void print_usage(int a) {
+	a=2;
 	printf("\nDie Eingabe wurde nicht erkannt\n");
 	printf("Bitte rufen Sie myfind wie folgt auf: \n");
 	printf("myfind <directory> [ <aktion> ] ...\n");

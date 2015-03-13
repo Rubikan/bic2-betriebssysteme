@@ -25,7 +25,7 @@ int parse_options(int argc, char* argv[], Option* first) {
 		if (strcmp("-user", argv[i]) == 0) {
 			pPasswd = getpwnam(argv[i+1]);
 			if (pPasswd == NULL) {
-				printf("%s: '%s' is not the name of a known user\n", argv[0], argv[i+1]);
+				fprintf(stderr,"%s: '%s' is not the name of a known user\n", argv[0], argv[i+1]);
 				err = 98;
 				return err;
 			} else {
