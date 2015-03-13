@@ -21,9 +21,9 @@ int main(int argc, char* argv[]) {
 	char* startdir = (argv[1]!=NULL) ? ((strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".") : ".";
 	parsErr=parse_options(argc, argv, first);
 
-	if(!parsErr){
+	if (!parsErr) {
 		do_dir(startdir, first);
-	}else{
+	} else {
 		printf("\nDie Eingabe wurde nicht erkannt\n");
 		printf("Bitte rufen Sie myfind wie folgt auf: \n");
 		printf("myfind <directory> [ <aktion> ] ...\n");
@@ -35,6 +35,8 @@ int main(int argc, char* argv[]) {
 		printf("'-ls'\n");
 		printf("'-nouser'\n");
 		printf("'-path'\n");
+		free_options(first);
+		return EXIT_FAILURE;
 	}
 
 	free_options(first);
@@ -59,7 +61,7 @@ void do_dir(const char* dir_path, Option* first) {
 			strcat(file, pDirentry->d_name);
 			status = stat(file, &pStat);
 
-			if(status == -1)
+			if (status == -1)
 				printf("ERROR: %s\n", strerror(errno));
 
 			if S_ISDIR(pStat.st_mode) {
