@@ -148,7 +148,7 @@ void do_file(const char* file_path, Option* first) {
       	exit(EXIT_FAILURE);
       }
 
-			printf("%6ld %5ld ", (long) pStat.st_ino, ((long) pStat.st_blocks)/2);
+			printf("%6ld %4ld ", (long) pStat.st_ino, ((long) pStat.st_blocks)/2);
 			printf((S_ISDIR(pStat.st_mode)) ? "d" : "-");
 			printf((pStat.st_mode & S_IRUSR) ? "r" : "-");
 			printf((pStat.st_mode & S_IWUSR) ? "w" : "-");
@@ -159,7 +159,7 @@ void do_file(const char* file_path, Option* first) {
 			printf((pStat.st_mode & S_IROTH) ? "r" : "-");
 			printf((pStat.st_mode & S_IWOTH) ? "w" : "-");
 			printf((pStat.st_mode & S_IXOTH) ? "x" : "-");
-			printf("%4ld %s %8s %12ld %s %s\n", (long) pStat.st_nlink, username, groupname, (long) pStat.st_size,format_date, file_path);
+			printf("%4ld %s %8s %11ld %s %s\n", (long) pStat.st_nlink, username, groupname, (long) pStat.st_size,format_date, file_path);
 		}
 		current = current->next;
 	}
