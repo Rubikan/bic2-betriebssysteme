@@ -148,7 +148,7 @@ void do_file(const char* file_path, Option* first) {
       	exit(EXIT_FAILURE);
       }
 
-			printf("%ld %5ld ", (long) pStat.st_ino, (long) pStat.st_blocks);
+			printf("%ld %5ld ", (long) pStat.st_ino, ((long) pStat.st_blocks)/2);
 			printf((S_ISDIR(pStat.st_mode)) ? "d" : "-");
 			printf((pStat.st_mode & S_IRUSR) ? "r" : "-");
 			printf((pStat.st_mode & S_IWUSR) ? "w" : "-");
