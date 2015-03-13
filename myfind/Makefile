@@ -49,3 +49,6 @@ doc: html pdf
 
 clean:
 	rm -f $(OBJDIR)/*.o
+
+clean-doc:
+	rm -rf doc
