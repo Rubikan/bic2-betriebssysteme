@@ -11,7 +11,7 @@
 
 void do_dir(const char* dir_path, Option* first);
 void do_file(const char* file_path, Option* first);
-void print_usage(int a);
+void print_usage(void);
 
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
@@ -165,8 +165,7 @@ void do_file(const char* file_path, Option* first) {
 	}
 }
 
-void print_usage(int a) {
-	a=2;
+void print_usage(void) {
 	printf("\nDie Eingabe wurde nicht erkannt\n");
 	printf("Bitte rufen Sie myfind wie folgt auf: \n");
 	printf("myfind <directory> [ <aktion> ] ...\n");
