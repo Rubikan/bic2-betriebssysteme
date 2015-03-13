@@ -53,7 +53,7 @@ void do_dir(const char* dir_path, Option* first) {
 	pDir = opendir(dir_path);
 
 	if (pDir == NULL) {
-		printf("Cannot open directory %s!\n", dir_path);
+		printf("%s\n", dir_path);
 	} else {
 		while ((pDirentry = readdir(pDir)) != NULL) {
 			strcpy(file, dir_path);
