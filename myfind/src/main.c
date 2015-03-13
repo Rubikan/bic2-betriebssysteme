@@ -10,6 +10,7 @@
 
 void do_dir(const char* dir_path, Option* first);
 void do_file(const char* file_path, Option* first);
+void print_usage();
 
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
@@ -19,23 +20,20 @@ int main(int argc, char* argv[]) {
 	/*Generell muss der Teil hier noch stark überarbeitet werden, eine Directory Angabe in find*/
 	/*muss nicht zwanghaft mit "." oder "/" anfangen.*/
 	char* startdir = (argv[1]!=NULL) ? ((strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".") : ".";
-	parsErr=parse_options(argc, argv, first);
+	parsErr = parse_options(argc, argv, first);
 
-	if (!parsErr) {
-		do_dir(startdir, first);
-	} else {
-		printf("\nDie Eingabe wurde nicht erkannt\n");
-		printf("Bitte rufen Sie myfind wie folgt auf: \n");
-		printf("myfind <directory> [ <aktion> ] ...\n");
-		printf("Moegliche aktionen\n");
-		printf("'-user'\n");
-		printf("'-name'\n");
-		printf("'-type'\n");
-		printf("'-print'\n");
-		printf("'-ls'\n");
-		printf("'-nouser'\n");
-		printf("'-path'\n");
-		free_options(first);
+	switch(parsErr) {
+		case 0:
+			do_dir(startdir, first);
+			break;
+		case 98:
+			break;
+		case 99:
+			print_usage();
+			break;
+	}
+	if (parsErr) {
+		/*free_options(first);*/
 		return EXIT_FAILURE;
 	}
 
@@ -153,4 +151,18 @@ void do_file(const char* file_path, Option* first) {
 		}
 		current = current->next;
 	}
+}
+
+void print_usage() {
+	printf("\nDie Eingabe wurde nicht erkannt\n");
+	printf("Bitte rufen Sie myfind wie folgt auf: \n");
+	printf("myfind <directory> [ <aktion> ] ...\n");
+	printf("Moegliche aktionen\n");
+	printf("'-user'\n");
+	printf("'-name'\n");
+	printf("'-type'\n");
+	printf("'-print'\n");
+	printf("'-ls'\n");
+	printf("'-nouser'\n");
+	printf("'-path'\n");
 }

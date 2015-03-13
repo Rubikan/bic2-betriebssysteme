@@ -1,3 +1,4 @@
+#include <pwd.h>
 #include "parseopt.h"
 
 /**
@@ -10,20 +11,28 @@
  * \return void
  */
 int parse_options(int argc, char* argv[], Option* first) {
+	struct passwd *pPasswd;
 	int i = (argv[1]==NULL ? 1 : (strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? 2 : 1);
 	int default_print = 1;
 	Option* current = first;
-	int err=0;
-	
-	if(argc==1){
+	int err = 0;
+
+	if (argc == 1) {
 		err=99;
 	}
 
 	for (; i < argc; i++) {
 		if (strcmp("-user", argv[i]) == 0) {
-			current = create_option(current, "-user", argv[++i]);
-      current->next = (Option *) malloc(sizeof(Option));
-      current = current->next;
+			pPasswd = getpwnam(argv[i+1]);
+			if (pPasswd == NULL) {
+				printf("%s: '%s' is not the name of a known user\n", argv[0], argv[i+1]);
+				err = 98;
+				return err;
+			} else {
+				current = create_option(current, "-user", argv[++i]);
+	      current->next = (Option *) malloc(sizeof(Option));
+	      current = current->next;
+			}
 		}
 		else if (strcmp("-name", argv[i]) == 0) {
       current = create_option(current, "-name", argv[++i]);
