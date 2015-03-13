@@ -16,10 +16,7 @@ void print_usage(void);
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
 	int parsErr=0;
-
-	/*TODO: Falls kein Directory UND keine Options angegeben werden passiert ein Segfault.*/
-	/*Generell muss der Teil hier noch stark überarbeitet werden, eine Directory Angabe in find*/
-	/*muss nicht zwanghaft mit "." oder "/" anfangen.*/
+	
 	char* startdir = (argv[1]!=NULL) ? ((strncmp(".", argv[1], 1) == 0 || strncmp("/", argv[1], 1) == 0) ? argv[1] : ".") : ".";
 	parsErr = parse_options(argc, argv, first);
 
@@ -35,7 +32,6 @@ int main(int argc, char* argv[]) {
 			break;
 	}
 	if (parsErr) {
-		/*free_options(first);*/
 		return EXIT_FAILURE;
 	}
 
@@ -43,6 +39,14 @@ int main(int argc, char* argv[]) {
 	return EXIT_SUCCESS;
 }
 
+/**
+ * \brief interrates through file directory's
+ *
+ * \param dir_path 
+ * \param first the 
+ *
+ * \return Pointer to the option struct
+*/
 void do_dir(const char* dir_path, Option* first) {
 	DIR *pDir;
 	DIR *pSubDir;
@@ -55,7 +59,6 @@ void do_dir(const char* dir_path, Option* first) {
 	pDir = opendir(dir_path);
 
 	if (pDir == NULL) {
-		/*printf("errorMein: %d\n", S_ISREG(4095));*/
 		if S_ISREG(pStat.st_mode) {
 			do_file(file, first);
 		} else {
@@ -107,7 +110,6 @@ void do_file(const char* file_path, Option* first) {
 	strcpy(temp, file_path);
 	file_name = basename(temp);
 	/*Beinhaltet alle Informationen zu dem File*/
-	/*Folien "Linux Filesystem" ab Seite 16.*/
 	stat(file_path, &pStat);
 
 	while(current->next != NULL) {
