@@ -39,12 +39,13 @@ int main(int argc, char* argv[]) {
 }
 
 /**
- * \brief interrates through file directory's
+ * \brief interrates through file directory's if dir_path is an dir 
+ *			if not it call the function do_file
  *
- * \param dir_path 
- * \param first the 
+ * \param dir_path path to file
+ * \param first first Option in the Optionslist
  *
- * \return Pointer to the option struct
+ * \return nothing
 */
 void do_dir(const char* dir_path, Option* first) {
 	DIR *pDir;
