@@ -67,7 +67,7 @@ int parse_options(int argc, char* argv[], Option* first) {
       current = current->next;
 		}
 		else {
-			printf("%s ist keine gueltige Aktion!\n", argv[i]);
+			/*printf("%s ist keine gueltige Aktion!\n", argv[i]);*/
 			err=99;
 		}
 	}
