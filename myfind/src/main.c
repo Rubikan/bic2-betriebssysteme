@@ -50,10 +50,17 @@ void do_dir(const char* dir_path, Option* first) {
 	struct stat pStat;
 	char file[512];
 	int status;
+	strcpy(file, dir_path);
+	stat(file, &pStat);
 	pDir = opendir(dir_path);
 
 	if (pDir == NULL) {
-		printf("%s\n", dir_path);
+		/*printf("errorMein: %d\n", S_ISREG(4095));*/
+		if S_ISREG(pStat.st_mode) {
+			do_file(file, first);
+		} else {
+			printf("%s\n", dir_path);
+		}
 	} else {
 		while ((pDirentry = readdir(pDir)) != NULL) {
 			strcpy(file, dir_path);

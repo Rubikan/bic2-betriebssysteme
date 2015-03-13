@@ -81,6 +81,9 @@ int check_user(struct stat pStat, char* usr_argument) {
 		return 0;
 	}
 	uid=strtol(usr_argument,NULL,10);
+	if(uid==0){
+		uid=-999;
+	}
 	if ((strncmp(username, usr_argument,50) != 0)){
 		if (uid != (long)pStat.st_uid) {
 			return 0;

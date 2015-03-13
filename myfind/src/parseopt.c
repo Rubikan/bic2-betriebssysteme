@@ -14,6 +14,10 @@ int parse_options(int argc, char* argv[], Option* first) {
 	int default_print = 1;
 	Option* current = first;
 	int err=0;
+	
+	if(argc==1){
+		err=99;
+	}
 
 	for (; i < argc; i++) {
 		if (strcmp("-user", argv[i]) == 0) {
