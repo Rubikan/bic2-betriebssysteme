@@ -71,8 +71,10 @@ int check_user(struct stat pStat, char* usr_argument) {
 	long uid;
 	char* username;
 	struct passwd* userInfo;
+	struct passwd* userInfo2;
 
 	userInfo = getpwuid(pStat.st_uid);
+	userInfo2 = getpwnam(usr_argument);
 	if (userInfo == NULL) {
 		return 0;
 	}
@@ -85,7 +87,7 @@ int check_user(struct stat pStat, char* usr_argument) {
 		uid=-999;
 	}
 	if ((strncmp(username, usr_argument,50) != 0)){
-		if (uid != (long)pStat.st_uid) {
+		if (userInfo2!=NULL || uid != (long)pStat.st_uid) {
 			return 0;
 		}
 	}
