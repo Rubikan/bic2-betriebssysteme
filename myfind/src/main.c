@@ -143,8 +143,8 @@ void do_file(const char* file_path, Option* first) {
 			/*Formatierten Zeit-String erzeugen*/
 			lastmod_time = pStat.st_mtime;
       temp_time = localtime(&lastmod_time);
-			if (strftime(format_date, sizeof(format_date), "%b %e %H:%M ", temp_time) == 0) {
-        fprintf(stderr, "strftime returned 0");
+			if (strftime(format_date, sizeof(format_date), "%b %d %H:%M ", temp_time) == 0) {
+        fprintf(stderr, "Fehler bei strftime");
       	exit(EXIT_FAILURE);
       }
 
