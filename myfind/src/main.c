@@ -143,12 +143,12 @@ void do_file(const char* file_path, Option* first) {
 			/*Formatierten Zeit-String erzeugen*/
 			lastmod_time = pStat.st_mtime;
       temp_time = localtime(&lastmod_time);
-			if (strftime(format_date, sizeof(format_date), "%b %d %H:%M ", temp_time) == 0) {
+			if (strftime(format_date, sizeof(format_date), "%b %e %H:%M ", temp_time) == 0) {
         fprintf(stderr, "strftime returned 0");
       	exit(EXIT_FAILURE);
       }
 
-			printf("%ld %5ld ", (long) pStat.st_ino, ((long) pStat.st_blocks)/2);
+			printf("%6ld %5ld ", (long) pStat.st_ino, ((long) pStat.st_blocks)/2);
 			printf((S_ISDIR(pStat.st_mode)) ? "d" : "-");
 			printf((pStat.st_mode & S_IRUSR) ? "r" : "-");
 			printf((pStat.st_mode & S_IWUSR) ? "w" : "-");
@@ -159,8 +159,7 @@ void do_file(const char* file_path, Option* first) {
 			printf((pStat.st_mode & S_IROTH) ? "r" : "-");
 			printf((pStat.st_mode & S_IWOTH) ? "w" : "-");
 			printf((pStat.st_mode & S_IXOTH) ? "x" : "-");
-			printf("%4ld %s %s %9ld %s %s\n", (long) pStat.st_nlink, username, groupname, (long) pStat.st_size,format_date, file_path);
-			/*strftime(char *s, size_t max, const char *format, const struct tm *tm);*/
+			printf("%4ld %s %8s %12ld %s %s\n", (long) pStat.st_nlink, username, groupname, (long) pStat.st_size,format_date, file_path);
 		}
 		current = current->next;
 	}
