@@ -19,10 +19,10 @@ all: main parseopt checks
 	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o $(OBJDIR)/checks.o -o $(BINDIR)/myfind
 
 test: all
-	/usr/local/bin/test-find.sh -t ./bin/myfind -r /usr/local/bin/bic-myfind
+	/usr/local/bin/test-find.sh -t ./bin/myfind -r /usr/local/bin/bic-myfind -c
 
 test-full: all
-	/usr/local/bin/test-find.sh -t ./bin/myfind -r /usr/local/bin/bic-myfind -f
+	/usr/local/bin/test-find.sh -t ./bin/myfind -r /usr/local/bin/bic-myfind -c -f
 
 valgrind:
 	valgrind --leak-check=full ./bin/myfind . -nouser -name test
