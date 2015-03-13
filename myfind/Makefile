@@ -18,10 +18,10 @@ checks: $(SRCDIR)/checks.h $(SRCDIR)/checks.c
 all: main parseopt checks
 	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o $(OBJDIR)/checks.o -o $(BINDIR)/myfind
 
-test:
+test: all
 	/usr/local/bin/test-find.sh -t ./bin/myfind -r /usr/local/bin/bic-myfind
 
-test-full:
+test-full: all
 	/usr/local/bin/test-find.sh -t ./bin/myfind -r /usr/local/bin/bic-myfind -f
 
 valgrind:
