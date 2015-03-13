@@ -20,7 +20,7 @@
  * \brief Checks if a file has the given type.
  *
  * \param pStat Pointer to the struct containing file information
- * \param char File type
+ * \param type File type
  *
  * \return int 1 if true, 0 if false
  *
