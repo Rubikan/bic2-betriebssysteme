@@ -18,6 +18,12 @@ checks: $(SRCDIR)/checks.h $(SRCDIR)/checks.c
 all: main parseopt checks
 	$(CC) $(OBJDIR)/main.o $(OBJDIR)/parseopt.o $(OBJDIR)/checks.o -o $(BINDIR)/myfind
 
+test:
+	/usr/local/bin/test-find.sh -t ./bin/myfind -r /usr/local/bin/bic-myfind
+
+test-full:
+	/usr/local/bin/test-find.sh -t ./bin/myfind -r /usr/local/bin/bic-myfind -f
+
 valgrind:
 	valgrind --leak-check=full ./bin/myfind . -nouser -name test
 
