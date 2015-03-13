@@ -53,6 +53,7 @@ doc: html pdf
 
 clean:
 	rm -f $(OBJDIR)/*.o
+	rm -f $(BINDIR)/*
 
 clean-doc:
 	rm -rf doc
