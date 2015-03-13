@@ -4,6 +4,10 @@ DOXYGEN = doxygen
 SRCDIR  = src
 OBJDIR  = obj
 BINDIR  = bin
+CP			= cp
+CD			= cd
+MV			= mv
+GREP		= grep
 
 default: all
 
