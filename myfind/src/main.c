@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 			do_dir(startdir, first);
 			break;
 		case 98:
-		
+
 			break;
 		case 99:
 			print_usage(1);
@@ -91,6 +91,15 @@ void do_dir(const char* dir_path, Option* first) {
 
 void do_file(const char* file_path, Option* first) {
 	Option* current = first;
+	/*Benutzernamen und Gruppennamen für -ls*/
+	char* username;
+	char* groupname;
+	struct passwd* userInfo;
+	struct group* groupInfo;
+	/*Zeit für -ls*/
+	char format_date[200];
+	time_t lastmod_time;
+	struct tm* temp_time;
 	/*Den Filename für die Namensüberprüfung extrahieren mit basename()*/
 	char* temp = malloc(strlen(file_path)+1);
 	char* file_name = NULL;
@@ -100,15 +109,6 @@ void do_file(const char* file_path, Option* first) {
 	/*Beinhaltet alle Informationen zu dem File*/
 	/*Folien "Linux Filesystem" ab Seite 16.*/
 	stat(file_path, &pStat);
-	/*Benutzernamen und Gruppennamen für -ls*/
-	char* username;
-	char* groupname;
-	struct passwd* userInfo;
-	struct group* groupInfo;
-	/*Zeit für -ls*/
-	char format_date[200];
-	time_t lastmod_time;
-  struct tm* temp_time;
 
 	while(current->next != NULL) {
 		if (strncmp(current->name, "-name", 5) == 0) {
