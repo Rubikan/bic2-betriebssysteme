@@ -16,6 +16,7 @@ int parse_options(int argc, char* argv[], Option* first) {
 	int default_print = 1;
 	Option* current = first;
 	int err = 0;
+	int uid;
 
 	if (argc == 1) {
 		err=99;
@@ -25,9 +26,20 @@ int parse_options(int argc, char* argv[], Option* first) {
 		if (strcmp("-user", argv[i]) == 0) {
 			pPasswd = getpwnam(argv[i+1]);
 			if (pPasswd == NULL) {
-				fprintf(stderr,"%s: '%s' is not the name of a known user\n", argv[0], argv[i+1]);
-				err = 98;
-				return err;
+				uid=strtol(argv[i+1],NULL,10);
+				if(uid==0){
+					uid=-999;
+				}
+				pPasswd =getpwuid(uid);
+				if (pPasswd == NULL) {
+					fprintf(stderr,"%s: '%s' is not the name of a known user\n", argv[0], argv[i+1]);
+					err = 98;
+					return err;
+				} else {
+					current = create_option(current, "-user", argv[++i]);
+					current->next = (Option *) malloc(sizeof(Option));
+					current = current->next;
+			}
 			} else {
 				current = create_option(current, "-user", argv[++i]);
 	      current->next = (Option *) malloc(sizeof(Option));
