@@ -13,6 +13,12 @@ void do_dir(const char* dir_path, Option* first);
 void do_file(const char* file_path, Option* first);
 void print_usage(void);
 
+/**
+ * \brief main method of myfind 
+ * 		  calls parse_options and do_dir
+ *
+ * \return success if no option was wrong
+ */
 int main(int argc, char* argv[]) {
 	Option* first = (Option *) malloc(sizeof(Option));
 	int parsErr=0;
@@ -92,6 +98,15 @@ void do_dir(const char* dir_path, Option* first) {
 	closedir(pDir);
 }
 
+/**
+ * \brief checks all options for file 
+ *			if the file doesn't pass the checks the method stops the checking
+ *
+ * \param file_path path to file
+ * \param first first Option in the Optionslist
+ *
+ * \return nothing
+*/
 void do_file(const char* file_path, Option* first) {
 	Option* current = first;
 	/*Benutzernamen und Gruppennamen für -ls*/
@@ -167,6 +182,12 @@ void do_file(const char* file_path, Option* first) {
 	}
 }
 
+/**
+ *  \brief prints the usage of myfind
+ *
+ * \return nothing
+*/
+ */
 void print_usage(void) {
 	printf("\nDie Eingabe wurde nicht erkannt\n");
 	printf("Bitte rufen Sie myfind wie folgt auf: \n");
