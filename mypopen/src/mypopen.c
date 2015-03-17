@@ -23,7 +23,11 @@ FILE *popen(const char *command, const char *type) {
     /*TODO: Error handling*/
   }
   pid = fork(void);
-  if (pid == -1) {
+  if (pid == 0) {
+    /*TODO: Child process*/
+  } else if (pid > 0) {
+    /*TODO: Parent process*/
+  } else if (pid < 0) {
     /*TODO: Error handling*/
   }
 }
