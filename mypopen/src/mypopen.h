@@ -1,7 +1,7 @@
 /**
  *
  * @file mypopen.h
- * Betriebssysteme Betriebssysteme myfind File.
+ * Betriebssysteme Betriebssysteme mypopen File.
  * Beispiel 2
  *
  * @author Andreas Rubik <andreas.rubik@technikum-wien.at>

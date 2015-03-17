@@ -1,7 +1,7 @@
 /**
  *
  * @file mypopen.c
- * Betriebssysteme Betriebssysteme myfind File.
+ * Betriebssysteme Betriebssysteme mypopen File.
  * Beispiel 2
  *
  * @author Andreas Rubik <andreas.rubik@technikum-wien.at>
@@ -16,9 +16,18 @@
 #include "mypopen.h"
 
 FILE *popen(const char *command, const char *type) {
+  int pipefd[2];
+  pid_t pid;
 
+  if (pipe(pipefd) == -1) {
+    /*TODO: Error handling*/
+  }
+  pid = fork(void);
+  if (pid == -1) {
+    /*TODO: Error handling*/
+  }
 }
 
 int pclose(FILE *stream) {
-  
+
 }
