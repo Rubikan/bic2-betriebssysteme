@@ -17,6 +17,7 @@
 #define MYPOPEN_H
 
 #include <unistd.h>
+#include <errno.h>
 
 FILE *popen(const char *command, const char *type);
 int pclose(FILE *stream);
