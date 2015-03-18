@@ -1,0 +1,14 @@
+Kommentare zu Partnergruppe:
+-) Kommentare ... schön
+-) alles in einer Datei ... bessere übersicht wenn in mehreren Dateien,
+							vorallem wenn der code noch wächst
+							ein h file Utils wäre eine Möglichkeit
+							-> reuse in anderen Projekten!!
+-) leichter/schneller lesbar wenn 
+				current->next = new;
+				current = current->next;
+			statt:
+				current->next = new;
+				current = new;
+-) + Enum
+-) datei ist kein ist kein guter name für ein Programm

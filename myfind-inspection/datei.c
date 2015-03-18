@@ -364,6 +364,10 @@ parms * check_parameter(int argc, char * argv[])
 			}
 
 			new->pattern = argv[i];
+			/* ### FB: man könnte es mit strchr kürzer lösen
+			 *			in dem fall wäre es strchr("bcdflps",new->pattern) == NULL
+			 *			http://www.cplusplus.com/reference/cstring/strchr/
+			*/
 			if (strchr(new->pattern, 'b') == NULL && strchr(new->pattern, 'c') == NULL && strchr(new->pattern, 'd') == NULL && strchr(new->pattern, 'f') == NULL && strchr(new->pattern, 'l') == NULL && strchr(new->pattern, 'p') == NULL && strchr(new->pattern, 's') == NULL)
 			{
 				printf("Wrong parameter.\n");
@@ -864,6 +868,10 @@ int check_user(const char * parms, struct stat * buffer)
 		if (!isdigit(parms[i]))
 			break;
 	}
+	/* ### FB: zuerst immer schauen ob es ein gültiger user ist 
+	 *  	   dann erst auf UID prüfen falls es eine Zahl ist
+	 *		   Wegen numerischen usernamen (160)
+	 */
 		if (i == user_length) /* if successful, check UID */
 		{
 			if ((uid = string_change(parms)) > -1)
@@ -962,6 +970,9 @@ void printf_handling(char * format, ...)
 	va_list args;
 
 	va_start(args, format);
+	/* ### FB: Einzeilige-If sind schlecht zum lesen!
+	* 		   zumindest { } um den Körper
+	*/
 	if (vprintf(format, args) < 0) error(1, 1, "%d", errno);
 	va_end(args);
 }
