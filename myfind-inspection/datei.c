@@ -739,6 +739,11 @@ char * checkpermissions(mode_t st_mode)
 	else if (st_mode & S_ISVTX)
 		mode[9] = 'T';
 
+	/* ### FB: Kein Fehler, aber ein Hinweis: 
+	 *         In diesem Anwendungsfall funktioniert es, aber generell ist es keine gute Idee Pointer auf lokale Variablen zu returnen,
+	 * 		   selbst wenn man static benutzt. Würdet ihr zum Beispiel printf("%s, %s", checkpermissions(st_mode), checkpermissions(st_mode));
+	 *         machen, würde 2 mal der selbe Wert geprintet werden.
+	 */
 	return mode;
 }
 
