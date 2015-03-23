@@ -15,9 +15,12 @@
 
 #include "mypopen.h"
 
+#define SHELL "/bin/sh"
+
 FILE *popen(const char *command, const char *type) {
   int pipefd[2];
   pid_t pid;
+  FILE *fd = NULL;
 
   if (*type != 'w' && *type != 'r') {
     errno = EINVAL;
@@ -26,26 +29,43 @@ FILE *popen(const char *command, const char *type) {
   if (pipe(pipefd) == -1) {
     return NULL;
   }
-  pid = fork(void);
+  pid = fork();
   if (pid == 0) {
-    switch(type) {
-      case 'w':
-        dup2(pdes[0], fileno(stdin));
-        close(pdex[0]);
-        break;
-      case 'r':
-        dup2(pdes[1], fileno(stdout));
-        close(pdex[1]);
-        break;
+    /* Child process */
+    if (*type == 'w') {
+      dup2(pipefd[0], fileno(stdin));
+      close(pipefd[0]);
+
+      close(pipefd[1]);
     }
-    /*TODO: Execute command in child*/
+    if (*type == 'r') {
+      dup2(pipefd[1], fileno(stdout));
+      close(pipefd[1]);
+
+      close(pipefd[0]);
+    }
+    execl(SHELL, SHELL, "-c", command, NULL);
+
   } else if (pid > 0) {
-    /*TODO: Parent process*/
+    /* Parent process */
+    if (*type == 'w') {
+      fd = fdopen(pipefd[1], type);
+      close(pipefd[0]);
+    }
+    if (*type == 'r') {
+      fd = fdopen(pipefd[0], type);
+      close(pipefd[1]);
+    }
+
   } else if (pid < 0) {
+    /* Error while forking */
     return NULL;
   }
+  /* TODO: Die PID in einer globalen static Variable für pclose speichern. */
+  return fd;
 }
 
 int pclose(FILE *stream) {
-
+  (void) stream;
+  return 1;
 }

@@ -16,6 +16,7 @@
 #ifndef MYPOPEN_H
 #define MYPOPEN_H
 
+#include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
 
