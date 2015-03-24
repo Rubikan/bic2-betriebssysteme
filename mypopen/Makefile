@@ -9,10 +9,16 @@ CD			= cd
 MV			= mv
 GREP		= grep
 
-default: mypopen
+default: test
 
 mypopen: $(SRCDIR)/mypopen.h $(SRCDIR)/mypopen.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/mypopen.c -o $(OBJDIR)/mypopen.o
+
+build-test: mypopen
+	$(CC) $(CFLAGS) $(OBJDIR)/mypopen.o -lpopentest -o $(BINDIR)/popentest
+
+test: build-test
+	./bin/popentest
 
 clean:
 	rm -f $(OBJDIR)/*.o
