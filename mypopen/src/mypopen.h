@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-FILE *popen(const char *command, const char *type);
-int pclose(FILE *stream);
+FILE *mypopen(const char *command, const char *type);
+int mypclose(FILE *stream);
 
 #endif

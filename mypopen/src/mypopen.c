@@ -17,7 +17,7 @@
 
 #define SHELL "/bin/sh"
 
-FILE *popen(const char *command, const char *type) {
+FILE *mypopen(const char *command, const char *type) {
   int pipefd[2];
   pid_t pid;
   FILE *fd = NULL;
@@ -65,7 +65,7 @@ FILE *popen(const char *command, const char *type) {
   return fd;
 }
 
-int pclose(FILE *stream) {
+int mypclose(FILE *stream) {
   (void) stream;
   return 1;
 }
