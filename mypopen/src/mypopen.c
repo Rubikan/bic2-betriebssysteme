@@ -32,7 +32,7 @@ FILE *mypopen(const char *command, const char *type) {
   if (pipe(pipefd) == -1) {
     return NULL;
   }
-  /*vergleich der Pipe ID*/  
+  /*vergleich der Pipe ID, falls bedingung erfüllt wird, wird ein neuer versuch gestartet*/  
   if (pid_glob > -1) {
     errno = EAGAIN;
     return NULL;
