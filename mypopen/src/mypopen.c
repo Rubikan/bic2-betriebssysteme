@@ -31,8 +31,8 @@ FILE *mypopen(const char *command, const char *type) {
   if (pipe(pipefd) == -1) {
     return NULL;
   }
-  if(pid_glob > -2){
-    errno=EAGAIN;
+  if (pid_glob > -1) {
+    errno = EAGAIN;
     return NULL;
   }
   pid = fork();
