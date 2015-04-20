@@ -18,6 +18,7 @@
 #define SHELL "/bin/sh"
 
 static pid_t pid_glob = -2;
+static FILE *myopenFile;
 
 FILE *mypopen(const char *command, const char *type) {
   int pipefd[2];
@@ -68,6 +69,7 @@ FILE *mypopen(const char *command, const char *type) {
     return NULL;
   }
   pid_glob = pid;
+  myopenFile=fd;
   /* TODO: Die PID in einer globalen static Variable für pclose speichern. */
   return fd;
 }
@@ -82,17 +84,14 @@ int mypclose(FILE *stream) {
     errno = ECHILD;
     return -1;
   }
-  printf("pid: %d\n", pid);
-  pid_help = getpid();
-  printf("pid_help: %d\n", pid_help);
-  if(pid_help != pid){
+  if(myopenFile!=stream){
+	  printf("error myopenFile==stream\n");
     errno = EINVAL;
     return -1;
   }
-  pid_help = waitpid(-1, &status,0);
-  if(pid_help > 0){
-    return -1;
-  }
   fclose(stream);
+  do{
+     pid_help = waitpid(pid, &status,0);  
+  }while(pid_help > 0);
   return 1;
 }
