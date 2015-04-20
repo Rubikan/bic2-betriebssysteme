@@ -40,7 +40,7 @@ FILE *mypopen(const char *command, const char *type) {
   /*öffnen eines Kindprozesses*/  
   pid = fork();
   if (pid == 0) {
-    /* Child process */
+    /* Kindprozess*/
     /*Schliessen der Pipeenden die für den write Befehl im Kind Prozess nicht benötigt werden*/	
     if (*type == 'w') {
       dup2(pipefd[0], fileno(stdin));
@@ -58,7 +58,7 @@ FILE *mypopen(const char *command, const char *type) {
     execl(SHELL, SHELL, "-c", command, NULL);
 
   } else if (pid > 0) {
-    /* Parent process */
+    /* Elternprozess */
     if (*type == 'w') {
       fd = fdopen(pipefd[1], type);
       close(pipefd[0]);
@@ -69,7 +69,7 @@ FILE *mypopen(const char *command, const char *type) {
     }
 
   } else if (pid < 0) {
-    /* Error while forking */
+    /* Fehler beim erstellen des Kindprozesses*/
     return NULL;
   }
   pid_glob = pid;
