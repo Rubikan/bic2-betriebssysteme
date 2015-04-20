@@ -73,24 +73,24 @@ FILE *mypopen(const char *command, const char *type) {
 }
 
 int mypclose(FILE *stream) {
-  pid_t pid=pid_glob;
-  pid_t pid_help=0;
-  int status=0;
+  pid_t pid = pid_glob;
+  pid_t pid_help = 0;
+  int status = 0;
   (void) stream;
-  pid_glob=-1;
-  if(pid==-2 || pid==-1){
+  pid_glob = -1;
+  if(pid == -2 || pid == -1) {
     errno = ECHILD;
     return -1;
   }
-  printf("pid: %d\n",pid);
-  pid_help=getpid();
-  printf("pid_help: %d\n",pid_help);
-  if(pid_help!=pid){
+  printf("pid: %d\n", pid);
+  pid_help = getpid();
+  printf("pid_help: %d\n", pid_help);
+  if(pid_help != pid){
     errno = EINVAL;
     return -1;
   }
-  pid_help=waitpid(-1,&status,0);
-  if(pid_help>0){
+  pid_help = waitpid(-1, &status,0);
+  if(pid_help > 0){
     return -1;
   }
   fclose(stream);
