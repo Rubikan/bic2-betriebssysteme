@@ -17,21 +17,21 @@
 
 #define SHELL "/bin/sh"
 
-static pid_t pid_glob=-2;
+static pid_t pid_glob = -2;
 
 FILE *mypopen(const char *command, const char *type) {
   int pipefd[2];
   pid_t pid;
   FILE *fd = NULL;
 
-  if (strcmp(type,"w")!=0 && strcmp(type,"r")!=0) {
+  if (strcmp(type,"w") != 0 && strcmp(type,"r") != 0) {
     errno = EINVAL;
     return NULL;
   }
   if (pipe(pipefd) == -1) {
     return NULL;
   }
-  if(pid_glob>-2){
+  if(pid_glob > -2){
     errno=EAGAIN;
     return NULL;
   }
@@ -67,7 +67,7 @@ FILE *mypopen(const char *command, const char *type) {
     /* Error while forking */
     return NULL;
   }
-  pid_glob=pid;
+  pid_glob = pid;
   /* TODO: Die PID in einer globalen static Variable für pclose speichern. */
   return fd;
 }
