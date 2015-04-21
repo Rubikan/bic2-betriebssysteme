@@ -70,35 +70,39 @@ FILE *mypopen(const char *command, const char *type) {
     }
 
   } else if (pid < 0) {
-    /* Fehler beim erstellen des Kindprozesses*/
+    /* Fehler beim Erstellen des Kindprozesses*/
     return NULL;
   }
   pid_glob = pid;
   myopenFile=fd;
-  /* TODO: Die PID in einer globalen static Variable für pclose speichern. */
   return fd;
 }
-/*Schliessen des Kindprozesses*/
+/* Schliessen des Kindprozesses */
 int mypclose(FILE *stream) {
   pid_t pid = pid_glob;
   pid_t pid_help = 0;
   int status = 0;
   (void) stream;
   pid_glob = -1;
-   /*hier wird überprüft ob überhaupt ein kindprozess existiert*/ 
-  if(pid == -2 || pid == -1) {
+   /* Überprüfung ob ein Kindprozess existiert */ 
+  if (pid == -2 || pid == -1) {
     errno = ECHILD;
     return -1;
   }
-  /*Hier wird auf ungültige argumente überprüft*/
-  if(myopenFile!=stream){
+  /* Hier wird auf ungültige Argumente überprüft */
+  if (myopenFile!=stream) {
 	  printf("error myopenFile==stream\n");
     errno = EINVAL;
     return -1;
   }
   fclose(stream);
-  do{
+  do {
      pid_help = waitpid(pid, &status,0);  
-  }while(pid_help > 0);
+  } while(pid_help > 0);
+  /* Behebt Testcase 13 aber bricht einige andere */
+  if (!WIFEXITED(pid)) {
+    errno = ECHILD;
+    return -1;
+  }
   return 1;
 }
