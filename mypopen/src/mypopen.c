@@ -18,7 +18,7 @@
 #define SHELL "/bin/sh"
 
 static pid_t pid_glob = -2;
-static FILE *myopenFile;
+static FILE *myopenFile=NULL;
 
 FILE *mypopen(const char *command, const char *type) {
   int pipefd[2];
@@ -33,8 +33,8 @@ FILE *mypopen(const char *command, const char *type) {
   if (pipe(pipefd) == -1) {
     return NULL;
   }
-  /*vergleich der Pipe ID, falls bedingung erfüllt wird, wird ein neuer versuch gestartet*/  
-  if (pid_glob > -1) {
+  /*vergleich der Pipe ID, falls bedingung erfüllt wird, wird ein neuer versuch gestartet  */
+  if (myopenFile != NULL) {
     errno = EAGAIN;
     return NULL;
   }
@@ -57,6 +57,7 @@ FILE *mypopen(const char *command, const char *type) {
       close(pipefd[0]);
     }
     execl(SHELL, SHELL, "-c", command, NULL);
+    return NULL;
 
   } else if (pid > 0) {
     /* Elternprozess */
@@ -68,13 +69,17 @@ FILE *mypopen(const char *command, const char *type) {
       fd = fdopen(pipefd[0], type);
       close(pipefd[1]);
     }
+    myopenFile=fd;
 
   } else if (pid < 0) {
     /* Fehler beim Erstellen des Kindprozesses*/
+    errno = EAGAIN;
+    close(pipefd[1]);
+    close(pipefd[0]);
+	myopenFile=NULL;
     return NULL;
   }
   pid_glob = pid;
-  myopenFile=fd;
   return fd;
 }
 /* Schliessen des Kindprozesses */
@@ -83,15 +88,14 @@ int mypclose(FILE *stream) {
   pid_t pid_help = 0;
   int status = 0;
   (void) stream;
-  pid_glob = -1;
-   /* Überprüfung ob ein Kindprozess existiert */ 
-  if (pid == -2 || pid == -1) {
+   /* Überprüfung ob ein Kindprozess existiert 
+    || pid == -1*/ 
+  if (myopenFile == NULL) {
     errno = ECHILD;
     return -1;
   }
   /* Hier wird auf ungültige Argumente überprüft */
   if (myopenFile!=stream) {
-	  printf("error myopenFile==stream\n");
     errno = EINVAL;
     return -1;
   }
@@ -99,10 +103,14 @@ int mypclose(FILE *stream) {
   do {
      pid_help = waitpid(pid, &status,0);  
   } while(pid_help > 0);
-  /* Behebt Testcase 13 aber bricht einige andere */
-  if (!WIFEXITED(pid)) {
+  if(WIFEXITED(status) != 0){
+	  return WEXITSTATUS(status);
+  }
+  if (!WIFEXITED(status) && WEXITSTATUS(status) == 0) {
     errno = ECHILD;
     return -1;
   }
+  pid_glob = -1;
+  myopenFile=NULL;
   return 1;
 }
