@@ -84,12 +84,10 @@ FILE *mypopen(const char *command, const char *type) {
 }
 /* Schliessen des Kindprozesses */
 int mypclose(FILE *stream) {
-  pid_t pid = pid_glob;
   pid_t pid_help = 0;
   int status = 0;
   (void) stream;
-   /* Überprüfung ob ein Kindprozess existiert 
-    || pid == -1*/ 
+   /* Überprüfung ob ein Kindprozess existiert */ 
   if (myopenFile == NULL) {
     errno = ECHILD;
     return -1;
@@ -101,7 +99,7 @@ int mypclose(FILE *stream) {
   }
   fclose(stream);
   do {
-     pid_help = waitpid(pid, &status,0);  
+     pid_help = waitpid(pid_glob, &status,0);  
   } while(pid_help > 0);
   if(WIFEXITED(status) != 0){
 	  return WEXITSTATUS(status);
