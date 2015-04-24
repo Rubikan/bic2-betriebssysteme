@@ -21,14 +21,14 @@ static pid_t pid_glob = -2;
 static FILE *myopenFile = NULL;
 
 /**
- * \brief Opens a process by creating a pipe, forking and opening the shell in the
- *        child process.
- *
- * \param command Command that should be executed in the child process
- * \param type Defines if the child process should be write ("w") or read ("r")
- *
- * \return File descriptor of the opened child process, NULL if there occured
- *         any problems
+* öffnet einen Prozess indem eine Pipe erstellt wird, und öffnet einen Kind Prozess
+* 
+ * mit command wählt man die Funktion aus die im Kind Prozess ausgeführt werden soll
+ * 
+ * mit type wird festgelegt wie der Kind Prozess ausgeführt werden soll, entweder 
+ * mit ("w") für schreiben oder mit ("r") für lesen
+ * 
+ * zurückgegeben wird bei erfolgreicher Ausführung der File descriptor, bei Fehlern wird NULL zurückgegeben
  */
 FILE *mypopen(const char *command, const char *type) {
   int pipefd[2];
@@ -93,13 +93,13 @@ FILE *mypopen(const char *command, const char *type) {
 }
 
 /**
- * \brief Waits for the given process to terminate and returns the exit status
- *        of the command
- *
- * \param stream File descriptor of the process that should be closed
- *
- * \return 1 if successful, -1 if an error occured
+ * Wartet bis der Prozess beendet wird und gibt den Exit Status zurück
+ * 
+ * Parameter stream ist ein File descriptor des Prozesses der geschlossen werden soll
+ * 
+ * gibt 1 bei Erfolg zurück und -1 bei einem Fehler
  */
+
 int mypclose(FILE *stream) {
   pid_t pid_help = 0;
   int status = 0;
