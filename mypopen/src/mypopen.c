@@ -24,12 +24,12 @@ FILE *mypopen(const char *command, const char *type) {
   int pipefd[2];
   pid_t pid;
   FILE *fd = NULL;
-/*vergleichen der eingabe mit den erlaubten Parametern w und r*/
-  if (strcmp(type,"w") != 0 && strcmp(type,"r") != 0) {
+  /* Überprüfen ob der mitgegebene Type gültig ist */
+  if (strncmp(type,"w", 1) != 0 && strncmp(type,"r", 1) != 0) {
     errno = EINVAL;
     return NULL;
   }
-  /*öffnen einer Pipe*/ 
+  /*öffnen einer Pipe*/
   if (pipe(pipefd) == -1) {
     return NULL;
   }
@@ -38,11 +38,11 @@ FILE *mypopen(const char *command, const char *type) {
     errno = EAGAIN;
     return NULL;
   }
-  /*öffnen eines Kindprozesses*/  
+  /*öffnen eines Kindprozesses*/
   pid = fork();
   if (pid == 0) {
     /* Kindprozess*/
-    /*Schliessen der Pipeenden die für den write Befehl im Kind Prozess nicht benötigt werden*/	
+    /*Schliessen der Pipeenden die für den write Befehl im Kind Prozess nicht benötigt werden*/
     if (*type == 'w') {
       dup2(pipefd[0], fileno(stdin));
       close(pipefd[0]);
@@ -87,7 +87,7 @@ int mypclose(FILE *stream) {
   pid_t pid_help = 0;
   int status = 0;
   (void) stream;
-   /* Überprüfung ob ein Kindprozess existiert */ 
+   /* Überprüfung ob ein Kindprozess existiert */
   if (myopenFile == NULL) {
     errno = ECHILD;
     return -1;
@@ -99,7 +99,7 @@ int mypclose(FILE *stream) {
   }
   fclose(stream);
   do {
-     pid_help = waitpid(pid_glob, &status,0);  
+     pid_help = waitpid(pid_glob, &status,0);
   } while(pid_help > 0);
   if(WIFEXITED(status) != 0){
 	  return WEXITSTATUS(status);
