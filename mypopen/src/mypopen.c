@@ -18,8 +18,18 @@
 #define SHELL "/bin/sh"
 
 static pid_t pid_glob = -2;
-static FILE *myopenFile=NULL;
+static FILE *myopenFile = NULL;
 
+/**
+ * \brief Opens a process by creating a pipe, forking and opening the shell in the
+ *        child process.
+ *
+ * \param command Command that should be executed in the child process
+ * \param type Defines if the child process should be write ("w") or read ("r")
+ *
+ * \return File descriptor of the opened child process, NULL if there occured
+ *         any problems
+ */
 FILE *mypopen(const char *command, const char *type) {
   int pipefd[2];
   pid_t pid;
@@ -29,27 +39,26 @@ FILE *mypopen(const char *command, const char *type) {
     errno = EINVAL;
     return NULL;
   }
-  /*öffnen einer Pipe*/
+  /* öffnen einer Pipe */
   if (pipe(pipefd) == -1) {
     return NULL;
   }
-  /*vergleich der Pipe ID, falls bedingung erfüllt wird, wird ein neuer versuch gestartet  */
+  /* Sicherstellen, dass mypopen nur 1 mal gleichzeitig aufgerufen werden kann */
   if (myopenFile != NULL) {
     errno = EAGAIN;
     return NULL;
   }
-  /*öffnen eines Kindprozesses*/
   pid = fork();
   if (pid == 0) {
     /* Kindprozess*/
-    /*Schliessen der Pipeenden die für den write Befehl im Kind Prozess nicht benötigt werden*/
+    /*Schliessen der für den "write" Befehl nicht nötigen Enden der Pipe */
     if (*type == 'w') {
       dup2(pipefd[0], fileno(stdin));
       close(pipefd[0]);
 
       close(pipefd[1]);
     }
-    /*Schliessen der Pipeenden die für den read Befehl im Kind Prozess nicht benötigt werden*/
+    /* Schliessen der für den "read" Befehl nicht nötigen Enden der Pipe */
     if (*type == 'r') {
       dup2(pipefd[1], fileno(stdout));
       close(pipefd[1]);
@@ -69,20 +78,28 @@ FILE *mypopen(const char *command, const char *type) {
       fd = fdopen(pipefd[0], type);
       close(pipefd[1]);
     }
-    myopenFile=fd;
+    myopenFile = fd;
 
   } else if (pid < 0) {
     /* Fehler beim Erstellen des Kindprozesses*/
     errno = EAGAIN;
     close(pipefd[1]);
     close(pipefd[0]);
-	myopenFile=NULL;
+	  myopenFile=NULL;
     return NULL;
   }
   pid_glob = pid;
   return fd;
 }
-/* Schliessen des Kindprozesses */
+
+/**
+ * \brief Waits for the given process to terminate and returns the exit status
+ *        of the command
+ *
+ * \param stream File descriptor of the process that should be closed
+ *
+ * \return 1 if successful, -1 if an error occured
+ */
 int mypclose(FILE *stream) {
   pid_t pid_help = 0;
   int status = 0;
@@ -101,7 +118,7 @@ int mypclose(FILE *stream) {
   do {
      pid_help = waitpid(pid_glob, &status,0);
   } while(pid_help > 0);
-  if(WIFEXITED(status) != 0){
+  if (WIFEXITED(status) != 0){
 	  return WEXITSTATUS(status);
   }
   if (!WIFEXITED(status) && WEXITSTATUS(status) == 0) {
@@ -109,6 +126,6 @@ int mypclose(FILE *stream) {
     return -1;
   }
   pid_glob = -1;
-  myopenFile=NULL;
+  myopenFile = NULL;
   return 1;
 }
