@@ -1,7 +1,7 @@
 /**
  *
  * @file sender.h
- * Betriebssysteme Betriebssysteme myshared File.
+ * Betriebssysteme myshared File.
  * Beispiel 3
  *
  * @author Andreas Rubik <andreas.rubik@technikum-wien.at>

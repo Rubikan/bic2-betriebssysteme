@@ -1,8 +1,8 @@
 /**
  *
  * @file empfaenger.h
- * Betriebssysteme Betriebssysteme myshared File.
- * Beispiel 1
+ * Betriebssysteme myshared File.
+ * Beispiel 3
  *
  * @author Andreas Rubik <andreas.rubik@technikum-wien.at>
  * @author Anna Glock <ic14b070@technikum-wien.at>

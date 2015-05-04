@@ -1,7 +1,7 @@
 /**
  *
  * @file sender.c
- * Betriebssysteme Betriebssysteme myshared File.
+ * Betriebssysteme myshared File.
  * Beispiel 3
  *
  * @author Andreas Rubik <andreas.rubik@technikum-wien.at>
@@ -17,7 +17,7 @@
 #include "sender.h"
 
 /**
- * \brief main method of empfaenger
+ * \brief main method of sender
  *
  * \return EXIT_SUCCESS if the program ran correctly
  */
