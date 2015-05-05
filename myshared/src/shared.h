@@ -21,6 +21,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#define GET_KEY(uid) 1000 * uid + 0
+#define GET_KEY(uid, offset) 1000 * uid + offset
+
+int get_buffersize(int argc, char* argv[]);
 
 #endif

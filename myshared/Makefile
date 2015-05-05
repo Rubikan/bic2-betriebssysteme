@@ -17,10 +17,12 @@ sender: $(SRCDIR)/shared.h $(SRCDIR)/sender.h $(SRCDIR)/sender.c
 empfaenger: $(SRCDIR)/shared.h $(SRCDIR)/empfaenger.h $(SRCDIR)/empfaenger.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/empfaenger.c -o $(OBJDIR)/empfaenger.o
 
-all: sender empfaenger
-	$(CC) $(OBJDIR)/sender.o -o $(BINDIR)/sender
-	$(CC) $(OBJDIR)/empfaenger.o -o $(BINDIR)/empfaenger
+shared: $(SRCDIR)/shared.h $(SRCDIR)/shared.c
+	$(CC) $(CFLAGS) -c $(SRCDIR)/shared.c -o $(OBJDIR)/shared.o
+
+all: sender empfaenger shared
+	$(CC) $(OBJDIR)/sender.o $(OBJDIR)/shared.o -o $(BINDIR)/sender
+	$(CC) $(OBJDIR)/empfaenger.o $(OBJDIR)/shared.o -o $(BINDIR)/empfaenger
 
 clean:
 	rm -f $(OBJDIR)/*.o
-	rm -f $(BINDIR)/*

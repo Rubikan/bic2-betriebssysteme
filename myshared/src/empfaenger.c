@@ -22,5 +22,9 @@
  * \return EXIT_SUCCESS if the program ran correctly
  */
 int main(int argc, char* argv[]) {
+  int buffersize = get_buffersize(argc, argv);
+
+  buffersize++;
+
   return EXIT_SUCCESS;
 }
