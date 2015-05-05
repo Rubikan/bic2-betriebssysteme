@@ -19,9 +19,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <sys/types.h>
 
-#define GET_KEY(uid, offset) 1000 * uid + offset
+#define GET_KEY(uid, offset) ftok("/etc/hosts",(1000 * uid + offset))
 
 int get_buffersize(int argc, char* argv[]);
 

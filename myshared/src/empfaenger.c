@@ -22,9 +22,20 @@
  * \return EXIT_SUCCESS if the program ran correctly
  */
 int main(int argc, char* argv[]) {
-  int buffersize = get_buffersize(argc, argv);
+  int buffersize;
+  int shmid;
+  key_t shmkey;
+  key_t semkey;
+  uid_t uid;
 
-  buffersize++;
+  uid = getuid();
+  shmkey = GET_KEY(uid, 0);
+  semkey = GET_KEY(uid, 2);
+  buffersize = get_buffersize(argc, argv);
+
+  if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
+    /* ERROR: Shared Memory existiert nicht */
+  }
 
   return EXIT_SUCCESS;
 }

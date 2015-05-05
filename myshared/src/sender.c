@@ -21,10 +21,21 @@
  *
  * \return EXIT_SUCCESS if the program ran correctly
  */
- int main(int argc, char* argv[]) {
-   int buffersize = get_buffersize(argc, argv);
+int main(int argc, char* argv[]) {
+  int buffersize;
+  int shmid;
+  key_t shmkey;
+  key_t semkey;
+  uid_t uid;
 
-   buffersize++;
+  uid = getuid();
+  shmkey = GET_KEY(uid, 0);
+  semkey = GET_KEY(uid, 1);
+  buffersize = get_buffersize(argc, argv);
 
-   return EXIT_SUCCESS;
- }
+  if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
+    /* ERROR: Shared memory existiert oder konnte nicht angelegt werden */
+  }
+
+  return EXIT_SUCCESS;
+}
