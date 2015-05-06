@@ -24,6 +24,7 @@
 int main(int argc, char* argv[]) {
   int buffersize;
   int shmid;
+  int* shmptr;
   key_t shmkey;
   key_t semkey;
   uid_t uid;
@@ -33,9 +34,16 @@ int main(int argc, char* argv[]) {
   semkey = GET_KEY(uid, 1);
   buffersize = get_buffersize(argc, argv);
 
+  /* Create shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
-    /* ERROR: Shared memory existiert oder konnte nicht angelegt werden */
+    /* ERROR: Shared memory already exists or couldn't be created */
     printf("Shared Memory wurde schon angelegt oder konnte nicht angelegt werden!\n");
+    exit(EXIT_FAILURE);
+  }
+  /* Get pointer to the shared memory */
+  if ((shmptr = shmat(shmid, NULL, 0)) == -1) {
+    /* ERROR: Error when getting pointer to shared memory */
+    printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n")
     exit(EXIT_FAILURE);
   }
 
