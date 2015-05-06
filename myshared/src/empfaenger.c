@@ -24,6 +24,7 @@
 int main(int argc, char* argv[]) {
   int buffersize;
   int shmid;
+  int* shmptr;
   key_t shmkey;
   key_t semkey;
   uid_t uid;
