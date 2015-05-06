@@ -57,7 +57,7 @@ void cleanup(int shmid, int* shmptr) {
     }
   }
   if (shmid != -1) {
-    if (shmctl(int shmid, int cmd, struct shmid_ds *buf) == -1) {
+    if (shmctl(shmid, IPC_RMID, NULL) == -1) {
       /* FATAL ERROR: Shared memory could not be removed */
       printf("SCHWERER FEHLER: Shared memory konnte nicht entfernt werden!\n
               Der Shared memory Bereich mit der ID %d muss von Hand entfernt werden!\n", schmid);
