@@ -50,7 +50,7 @@ int get_buffersize(int argc, char* argv[]) {
 void cleanup(int shmid, int* shmptr) {
   if (shmptr != NULL) {
     if (shmdt(shmptr) == -1) {
-      /* ERROR: Shared memory could not be detached */
+      /* FATAL ERROR: Shared memory could not be detached */
       printf("SCHWERER FEHLER: Shared memory konnte nicht ausgehängt werden!\n
               Der Shared memory Bereich mit der ID %d muss von Hand entfernt werden!\n", schmid);
       exit(EXIT_FAILURE);
@@ -58,7 +58,7 @@ void cleanup(int shmid, int* shmptr) {
   }
   if (shmid != -1) {
     if (shmctl(int shmid, int cmd, struct shmid_ds *buf) == -1) {
-      /* ERROR: Shared memory could not be removed */
+      /* FATAL ERROR: Shared memory could not be removed */
       printf("SCHWERER FEHLER: Shared memory konnte nicht entfernt werden!\n
               Der Shared memory Bereich mit der ID %d muss von Hand entfernt werden!\n", schmid);
       exit(EXIT_FAILURE);
