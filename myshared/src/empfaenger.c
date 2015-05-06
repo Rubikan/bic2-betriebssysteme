@@ -35,6 +35,8 @@ int main(int argc, char* argv[]) {
 
   if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
     /* ERROR: Shared Memory existiert nicht */
+    printf("Es wurde noch kein Shared Memory angelegt!\n");
+    exit(EXIT_FAILURE);
   }
 
   return EXIT_SUCCESS;
