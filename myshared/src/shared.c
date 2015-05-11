@@ -34,8 +34,8 @@ void print_usage() {
  * \return integer Size the ringbuffer should have
  */
 int get_buffersize(int argc, char* argv[]) {
-  int buffersize;
   int opt;
+  int buffersize = -1;
 
   while ((opt = getopt(argc, argv, "m:")) != -1) {
     switch(opt) {
