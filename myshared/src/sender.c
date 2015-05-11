@@ -26,12 +26,14 @@ int main(int argc, char* argv[]) {
   int shmid;
   int* shmptr;
   key_t shmkey;
-  key_t semkey;
+  key_t semkey_one;
+  key_t semkey_two;
   uid_t uid;
 
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
-  semkey = GET_KEY(uid, 1);
+  semkey_one = GET_KEY(uid, 1);
+  semkey_two = GET_KEY(uid, 2);
   buffersize = get_buffersize(argc, argv);
 
   /* Create shared memory */
