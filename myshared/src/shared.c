@@ -27,6 +27,9 @@ void print_usage() {
 /**
  * \brief Uses getopt to get the buffersize for the ring buffer
  *
+ * \param argc Argument counter
+ * \param argv Argument vector
+ *
  * \return integer Size the ringbuffer should have
  */
 int get_buffersize(int argc, char* argv[]) {
@@ -47,6 +50,11 @@ int get_buffersize(int argc, char* argv[]) {
   return buffersize;
 }
 
+/**
+ * \brief Cleans up the ids and pointers of shared memory
+ *
+ * \return void
+ */
 void cleanup(int shmid, int* shmptr) {
   if (shmptr != NULL) {
     if (shmdt(shmptr) == -1) {
