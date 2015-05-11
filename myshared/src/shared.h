@@ -24,6 +24,7 @@
 #include <sys/shm.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <getopt.h>
 
 #define GET_KEY(uid, offset) ftok("/etc/hosts",(1000 * uid + offset))
 
