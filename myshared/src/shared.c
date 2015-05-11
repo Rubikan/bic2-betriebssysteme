@@ -14,7 +14,6 @@
  */
 
 #include "shared.h"
-#include <errno.h>
 
 /**
  * \brief Prints the usage message for false arguments
