@@ -16,7 +16,6 @@
 #include "shared.h"
 #include "empfaenger.h"
 
-
 /**
  * \brief main method of empfaenger
  *
