@@ -24,6 +24,8 @@
 int main(int argc, char* argv[]) {
   int buffersize;
   int shmid;
+  int semid_one;
+  int semid_two;
   int* shmptr;
   key_t shmkey;
   key_t semkey_one;
@@ -46,6 +48,18 @@ int main(int argc, char* argv[]) {
   if ((shmptr = shmat(shmid, NULL, 0)) == (int*) -1) {
     /* ERROR: Error when getting pointer to shared memory */
     printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n");
+    exit(EXIT_FAILURE);
+  }
+  /* Get ID to first semaphore */
+  if ((semid_one = seminit(semkey_one, 0660, 0)) == -1) {
+    /* ERROR: Error when getting id of semaphore one */
+    printf("Der erste Semaphor konnte nicht angelegt werden!\n");
+    exit(EXIT_FAILURE);
+  }
+  /* Get ID to second semaphore */
+  if ((semid_two = seminit(semkey_two, 0660, 0)) == -1) {
+    /* ERROR: Error when getting id of semaphore two */
+    printf("Der zweite Semaphor konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);
   }
 

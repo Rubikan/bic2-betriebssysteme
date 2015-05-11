@@ -48,6 +48,18 @@ int main(int argc, char* argv[]) {
     printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);
   }
+  /* Get ID to first semaphore */
+  if ((semid_one = semgrab(semkey_one)) == -1) {
+    /* ERROR: Error when getting id of semaphore one */
+    printf("Der erste Semaphor konnte nicht \"gegrabbt\" werden!\n");
+    exit(EXIT_FAILURE);
+  }
+  /* Get ID to second semaphore */
+  if ((semid_two = semgrab(semkey_two)) == -1) {
+    /* ERROR: Error when getting id of semaphore two */
+    printf("Der zweite Semaphor konnte nicht \"gegrabbt\" werden!\n");
+    exit(EXIT_FAILURE);
+  }
 
   return EXIT_SUCCESS;
 }
