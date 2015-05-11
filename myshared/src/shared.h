@@ -17,6 +17,7 @@
 #define SHARED_H
 
 #include <stdio.h>
+#include <sem182.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/ipc.h>

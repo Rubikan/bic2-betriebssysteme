@@ -41,9 +41,9 @@ int main(int argc, char* argv[]) {
     exit(EXIT_FAILURE);
   }
   /* Get pointer to the shared memory */
-  if ((shmptr = shmat(shmid, NULL, 0)) == -1) {
+  if ((shmptr = shmat(shmid, NULL, 0)) == (int*) -1) {
     /* ERROR: Error when getting pointer to shared memory */
-    printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n")
+    printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);
   }
 

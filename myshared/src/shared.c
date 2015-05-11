@@ -64,16 +64,14 @@ void cleanup(int shmid, int* shmptr) {
   if (shmptr != NULL) {
     if (shmdt(shmptr) == -1) {
       /* FATAL ERROR: Shared memory could not be detached */
-      printf("SCHWERER FEHLER: Shared memory konnte nicht ausgehängt werden!\n
-              Der Shared memory Bereich mit der ID %d muss von Hand entfernt werden!\n", schmid);
+      printf("SCHWERER FEHLER: Shared memory konnte nicht ausgehängt werden!\nDer Shared memory Bereich mit der ID %d muss von Hand entfernt werden!\n", shmid);
       exit(EXIT_FAILURE);
     }
   }
   if (shmid != -1) {
     if (shmctl(shmid, IPC_RMID, NULL) == -1) {
       /* FATAL ERROR: Shared memory could not be removed */
-      printf("SCHWERER FEHLER: Shared memory konnte nicht entfernt werden!\n
-              Der Shared memory Bereich mit der ID %d muss von Hand entfernt werden!\n", schmid);
+      printf("SCHWERER FEHLER: Shared memory konnte nicht entfernt werden!\nDer Shared memory Bereich mit der ID %d muss von Hand entfernt werden!\n", shmid);
       exit(EXIT_FAILURE);
     }
   }
