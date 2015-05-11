@@ -15,6 +15,7 @@
 
 #include "shared.h"
 #include "empfaenger.h"
+#include <errno.h>
 
 /**
  * \brief main method of empfaenger
