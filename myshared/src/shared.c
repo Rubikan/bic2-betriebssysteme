@@ -60,7 +60,7 @@ int get_buffersize(int argc, char* argv[]) {
  *
  * \return void
  */
-void cleanup(int shmid, int* shmptr) {
+void cleanup(int shmid, int* shmptr, int semid) {
   if (shmptr != NULL) {
     if (shmdt(shmptr) == -1) {
       /* FATAL ERROR: Shared memory could not be detached */
@@ -72,6 +72,13 @@ void cleanup(int shmid, int* shmptr) {
     if (shmctl(shmid, IPC_RMID, NULL) == -1) {
       /* FATAL ERROR: Shared memory could not be removed */
       printf("SCHWERER FEHLER: Shared memory konnte nicht entfernt werden!\nDer Shared memory Bereich mit der ID %d muss von Hand entfernt werden!\n", shmid);
+      exit(EXIT_FAILURE);
+    }
+  }
+  if (semid != -1) {
+    if (semrm(semid) == -1) {
+      /* FATAL ERROR: Semaphore could not be removed */
+      printf("SCHWERER FEHLER: Semaphor mit der ID %d konnte nicht entfernt werden!", semid);
       exit(EXIT_FAILURE);
     }
   }
