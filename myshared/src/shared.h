@@ -26,7 +26,8 @@
 
 #define GET_KEY(uid, offset) ftok("/etc/hosts",(1000 * uid + offset))
 
-int get_buffersize(int argc, char* argv[]);
+void print_usage();
 void cleanup(int shmid, int* shmptr);
+int get_buffersize(int argc, char* argv[]);
 
 #endif
