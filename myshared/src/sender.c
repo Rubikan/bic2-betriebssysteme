@@ -15,6 +15,7 @@
 
 #include "shared.h"
 #include "sender.h"
+#include <errno.h>
 
 /**
  * \brief main method of sender
