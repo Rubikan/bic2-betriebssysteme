@@ -53,6 +53,11 @@ int get_buffersize(int argc, char* argv[]) {
 /**
  * \brief Cleans up the ids and pointers of shared memory
  *
+ * \param schmid The ID of the shared memory that should be detached.
+ *               -1 if you don't want to detach a shared memory.
+ * \param shmptr The pointer to the shared memory you want to remove.
+ *               NULL if you don't want to remove a shared memory.
+ *
  * \return void
  */
 void cleanup(int shmid, int* shmptr) {
