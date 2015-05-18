@@ -53,14 +53,18 @@ int get_buffersize(int argc, char* argv[]) {
 /**
  * \brief Cleans up the ids and pointers of shared memory
  *
- * \param schmid The ID of the shared memory that should be detached.
- *               -1 if you don't want to detach a shared memory.
- * \param shmptr The pointer to the shared memory you want to remove.
- *               NULL if you don't want to remove a shared memory.
+ * \param schmid    The ID of the shared memory that should be detached.
+ *                  -1 if you don't want to detach a shared memory.
+ * \param shmptr    The pointer to the shared memory you want to remove.
+ *                  NULL if you don't want to remove a shared memory.
+ * \param semid_one The id of the semaphore that should be removed.
+ *                  -1 if you don't want to remove a semaphore.
+ * \param semid_two The id of the semaphore that should be removed.
+ *                  -1 if you don't want to remove a semaphore.
  *
  * \return void
  */
-void cleanup(int shmid, int* shmptr, int semid) {
+void cleanup(int shmid, int* shmptr, int semid_one, int semid_two) {
   if (shmptr != NULL) {
     if (shmdt(shmptr) == -1) {
       /* FATAL ERROR: Shared memory could not be detached */
@@ -75,10 +79,17 @@ void cleanup(int shmid, int* shmptr, int semid) {
       exit(EXIT_FAILURE);
     }
   }
-  if (semid != -1) {
-    if (semrm(semid) == -1) {
+  if (semid_one != -1) {
+    if (semrm(semid_one) == -1) {
       /* FATAL ERROR: Semaphore could not be removed */
-      printf("SCHWERER FEHLER: Semaphor mit der ID %d konnte nicht entfernt werden!", semid);
+      printf("SCHWERER FEHLER: Semaphor mit der ID %d konnte nicht entfernt werden!", semid_one);
+      exit(EXIT_FAILURE);
+    }
+  }
+  if (semid_two != -1) {
+    if (semrm(semid_two) == -1) {
+      /* FATAL ERROR: Semaphore could not be removed */
+      printf("SCHWERER FEHLER: Semaphor mit der ID %d konnte nicht entfernt werden!", semid_two);
       exit(EXIT_FAILURE);
     }
   }

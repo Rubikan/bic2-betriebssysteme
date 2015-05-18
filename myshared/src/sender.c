@@ -27,6 +27,7 @@ int main(int argc, char* argv[]) {
   int semid_one;
   int semid_two;
   int* shmptr;
+  char ch;
   key_t shmkey;
   key_t semkey_one;
   key_t semkey_two;
@@ -61,6 +62,20 @@ int main(int argc, char* argv[]) {
     /* ERROR: Error when getting id of semaphore two */
     printf("Der zweite Semaphor konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);
+  }
+
+  while(read(STDIN_FILENO, &ch, 1) > 0) {
+    if (P(semid_one) == -1) {
+      cleanup(shmid, shmptr, semid_one, semid_two);
+      exit(EXIT_FAILURE);
+    }
+
+    /* Critical Section */
+
+    if (V(semid_two) == -1) {
+      cleanup(shmid, shmptr, semid_one, semid_two);
+      exit(EXIT_FAILURE);
+    }
   }
 
   return EXIT_SUCCESS;
