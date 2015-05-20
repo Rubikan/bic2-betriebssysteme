@@ -39,7 +39,8 @@ int main(int argc, char* argv[]) {
   semkey_two = GET_KEY(uid, 2);
   buffersize = get_buffersize(argc, argv);
 
-  /* Create shared memory */
+  /* Create s
+  hared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
     /* ERROR: Shared memory already exists or couldn't be created */
     printf("Shared Memory wurde schon angelegt oder konnte nicht angelegt werden!\n");
@@ -65,6 +66,7 @@ int main(int argc, char* argv[]) {
   }
 
   while(read(STDIN_FILENO, &ch, 1) > 0) {
+
     if (P(semid_one) == -1) {
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
@@ -77,6 +79,9 @@ int main(int argc, char* argv[]) {
       exit(EXIT_FAILURE);
     }
   }
+  /* Here EOF should be written to shared memory */
 
+  /* Here cleanup needs to be called to delete/remove shared memory and semaphores */
+  
   return EXIT_SUCCESS;
 }
