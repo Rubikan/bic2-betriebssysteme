@@ -32,6 +32,8 @@ int main(int argc, char* argv[]) {
   key_t semkey_one;
   key_t semkey_two;
   uid_t uid;
+  int maxElements;
+  int aktuellesEl;
 
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
@@ -39,8 +41,7 @@ int main(int argc, char* argv[]) {
   semkey_two = GET_KEY(uid, 2);
   buffersize = get_buffersize(argc, argv);
 
-  /* Create s
-  hared memory */
+  /* Create shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
     /* ERROR: Shared memory already exists or couldn't be created */
     printf("Shared Memory wurde schon angelegt oder konnte nicht angelegt werden!\n");
@@ -73,6 +74,9 @@ int main(int argc, char* argv[]) {
     }
 
     /* Critical Section */
+	if(shmptr[aktuellesEl%buffersize]=='\0'){
+		shmptr[aktuellesEl%buffersize]=ch;	
+	}
 
     if (V(semid_two) == -1) {
       cleanup(shmid, shmptr, semid_one, semid_two);
@@ -82,6 +86,8 @@ int main(int argc, char* argv[]) {
   /* Here EOF should be written to shared memory */
 
   /* Here cleanup needs to be called to delete/remove shared memory and semaphores */
+  
+   cleanup(shmid, shmptr, semid_one, semid_two);
   
   return EXIT_SUCCESS;
 }

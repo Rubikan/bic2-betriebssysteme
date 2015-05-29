@@ -29,12 +29,13 @@ int main(int argc, char* argv[]) {
   key_t semkey_one;
   key_t semkey_two;
   uid_t uid;
-
+  
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
   buffersize = get_buffersize(argc, argv);
+
 
   /* Get access to the already created shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
@@ -60,6 +61,22 @@ int main(int argc, char* argv[]) {
     printf("Der zweite Semaphor konnte nicht \"gegrabbt\" werden!\n");
     exit(EXIT_FAILURE);
   }
+  for(aktuellesEl=0;shmptr[aktuellesEl%buffersize]=='\0';aktuellesEl++){
+    if (P(semid_two) == -1) {
+      cleanup(shmid, shmptr, semid_one, semid_two);
+      exit(EXIT_FAILURE);
+    }
 
+    /* Critical Section */
+	/* write shmptr[aktuellesEl%buffersize] into output file*/
+	
+    if (V(semid_one) == -1) {
+      cleanup(shmid, shmptr, semid_one, semid_two);
+      exit(EXIT_FAILURE);
+    }
+	}
+  }
+  
+  cleanup(shmid, shmptr, semid_one, semid_two);
   return EXIT_SUCCESS;
 }
