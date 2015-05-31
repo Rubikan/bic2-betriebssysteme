@@ -24,11 +24,15 @@
 int main(int argc, char* argv[]) {
   int buffersize;
   int shmid;
+  int semid_one;
+  int semid_two;
   int* shmptr;
   key_t shmkey;
   key_t semkey_one;
   key_t semkey_two;
   uid_t uid;
+  int aktuellesEl;
+  char ch;
   
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
@@ -44,7 +48,7 @@ int main(int argc, char* argv[]) {
     exit(EXIT_FAILURE);
   }
   /* Get pointer to the shared memory */
-  if ((shmptr = shmat(shmid, NULL, SHM_RDONLY)) == (int*) -1) {
+  if ((shmptr = shmat(shmid, NULL, 0)) == (int*) -1) {
     /* ERROR: Error when getting pointer to shared memory */
     printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);
@@ -61,7 +65,8 @@ int main(int argc, char* argv[]) {
     printf("Der zweite Semaphor konnte nicht \"gegrabbt\" werden!\n");
     exit(EXIT_FAILURE);
   }
-  for(aktuellesEl=0;shmptr[aktuellesEl%buffersize]=='\0';aktuellesEl++){
+ /* for(aktuellesEl=0;shmptr[aktuellesEl%buffersize]!='\0';aktuellesEl++){*/
+ for(aktuellesEl=0;shmptr[aktuellesEl%buffersize]!='\0';aktuellesEl++){
     if (P(semid_two) == -1) {
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
@@ -69,13 +74,19 @@ int main(int argc, char* argv[]) {
 
     /* Critical Section */
 	/* write shmptr[aktuellesEl%buffersize] into output file*/
+	if(shmptr[aktuellesEl%buffersize]!='\0'){
+	  ch=shmptr[aktuellesEl%buffersize];
+	  shmptr[aktuellesEl%buffersize]='\0';
+	  write(STDOUT_FILENO,&ch,1);
+	}
+	/*printf("Char(%c) written, it is the %d. char, buffersize: %d.\n",ch,aktuellesEl,buffersize);*/
 	
     if (V(semid_one) == -1) {
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
-	}
-  }
+ }
+ /* }*/
   
   cleanup(shmid, shmptr, semid_one, semid_two);
   return EXIT_SUCCESS;

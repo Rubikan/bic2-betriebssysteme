@@ -32,8 +32,8 @@ int main(int argc, char* argv[]) {
   key_t semkey_one;
   key_t semkey_two;
   uid_t uid;
-  int maxElements;
-  int aktuellesEl;
+  /*int maxElements;*/
+  int aktuellesEl=0;
 
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
     exit(EXIT_FAILURE);
   }
   /* Get ID to first semaphore */
-  if ((semid_one = seminit(semkey_one, 0660, 0)) == -1) {
+  if ((semid_one = seminit(semkey_one, 0660, 1)) == -1) {
     /* ERROR: Error when getting id of semaphore one */
     printf("Der erste Semaphor konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);
@@ -67,6 +67,9 @@ int main(int argc, char* argv[]) {
   }
 
   while(read(STDIN_FILENO, &ch, 1) > 0) {
+	/*printf("I am in the while.\n");
+	printf("char (%c)\n",ch);*/
+	
 
     if (P(semid_one) == -1) {
       cleanup(shmid, shmptr, semid_one, semid_two);
@@ -76,18 +79,21 @@ int main(int argc, char* argv[]) {
     /* Critical Section */
 	if(shmptr[aktuellesEl%buffersize]=='\0'){
 		shmptr[aktuellesEl%buffersize]=ch;	
+		/*printf("Char(%c) written, it is the %d. char, buffersize: %d.\n",ch,aktuellesEl,buffersize);*/
+		aktuellesEl++;
 	}
-
     if (V(semid_two) == -1) {
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
+	
   }
   /* Here EOF should be written to shared memory */
 
   /* Here cleanup needs to be called to delete/remove shared memory and semaphores */
   
-   cleanup(shmid, shmptr, semid_one, semid_two);
+  /*printf("CleanUp\n");
+  cleanup(shmid, shmptr, semid_one, semid_two);*/
   
   return EXIT_SUCCESS;
 }
