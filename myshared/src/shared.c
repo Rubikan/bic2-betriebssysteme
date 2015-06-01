@@ -46,6 +46,7 @@ int parse_arguments(int argc, char* argv[]) {
   }
 
   while ((opt = getopt(argc, argv, "m:")) != -1) {
+    printf("Count: %d\n", count);
     if (count >= 1) {
       printf("Es wurden zu viele Argumente mitgegeben!\n");
       print_usage();
