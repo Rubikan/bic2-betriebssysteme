@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
   uid_t uid;
   int aktuellesEl;
   char ch;
-  
-  if(argc < 2){	 
+
+  if(argc < 2){
     printf("Es wurde keine Buffersize angegeben!\n");
     exit(EXIT_FAILURE);
   } else if(argc > 2){
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 		 }
 	  }
   }
-  
+
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
   semkey_one = GET_KEY(uid, 1);
@@ -78,29 +78,28 @@ int main(int argc, char* argv[]) {
     printf("Der zweite Semaphor konnte nicht \"gegrabbt\" werden!\n");
     exit(EXIT_FAILURE);
   }
- /* for(aktuellesEl=0;shmptr[aktuellesEl%buffersize]!='\0';aktuellesEl++){*/
- for(aktuellesEl=0;shmptr[aktuellesEl%buffersize]!='\0';aktuellesEl++){
-    if (P(semid_two) == -1) {
-      cleanup(shmid, shmptr, semid_one, semid_two);
-      exit(EXIT_FAILURE);
-    }
-
-    /* Critical Section */
-	/* write shmptr[aktuellesEl%buffersize] into output file*/
-	if(shmptr[aktuellesEl%buffersize]!='\0'){
-	  ch=shmptr[aktuellesEl%buffersize];
-	  shmptr[aktuellesEl%buffersize]='\0';
-	  write(STDOUT_FILENO,&ch,1);
-	}
-	/*printf("Char(%c) written, it is the %d. char, buffersize: %d.\n",ch,aktuellesEl,buffersize);*/
-	
-    if (V(semid_one) == -1) {
-      cleanup(shmid, shmptr, semid_one, semid_two);
-      exit(EXIT_FAILURE);
-    }
- }
- /* }*/
   
+  for (aktuellesEl=0;shmptr[aktuellesEl%buffersize]!='\0';aktuellesEl++) {
+     if (P(semid_two) == -1) {
+       cleanup(shmid, shmptr, semid_one, semid_two);
+       exit(EXIT_FAILURE);
+     }
+
+     /* Critical section begin */
+	   /* write shmptr[aktuellesEl%buffersize] into output file descriptor */
+	   if (shmptr[aktuellesEl%buffersize] != '\0') {
+	     ch = shmptr[aktuellesEl%buffersize];
+	     shmptr[aktuellesEl%buffersize] = '\0';
+	     write(STDOUT_FILENO, &ch, 1);
+	   }
+	   /* Critical section end*/
+
+     if (V(semid_one) == -1) {
+       cleanup(shmid, shmptr, semid_one, semid_two);
+       exit(EXIT_FAILURE);
+     }
+  }
+
   cleanup(shmid, shmptr, semid_one, semid_two);
   return EXIT_SUCCESS;
 }
