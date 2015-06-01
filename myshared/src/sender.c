@@ -49,11 +49,11 @@ int main(int argc, char* argv[]) {
 	  }
   }
 
+  buffersize = parse_arguments(argc, argv);
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
-  buffersize = get_buffersize(argc, argv);
 
   /* Create shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {

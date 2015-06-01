@@ -32,7 +32,7 @@ void print_usage() {
  *
  * \return integer Size the ringbuffer should have
  */
-int get_buffersize(int argc, char* argv[]) {
+int parse_arguments(int argc, char* argv[]) {
   int opt;
   int buffersize = -1;
 

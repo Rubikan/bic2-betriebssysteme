@@ -29,6 +29,6 @@
 
 void print_usage(void);
 void cleanup(int shmid, int* shmptr, int semid_one, int semid_two);
-int get_buffersize(int argc, char* argv[]);
+int parse_arguments(int argc, char* argv[]);
 
 #endif

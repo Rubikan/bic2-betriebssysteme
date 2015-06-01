@@ -47,12 +47,11 @@ int main(int argc, char* argv[]) {
 	  }
   }
 
+  buffersize = parse_arguments(argc, argv);
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
-  buffersize = get_buffersize(argc, argv);
-
 
   /* Get access to the already created shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
@@ -78,7 +77,7 @@ int main(int argc, char* argv[]) {
     printf("Der zweite Semaphor konnte nicht \"gegrabbt\" werden!\n");
     exit(EXIT_FAILURE);
   }
-  
+
   for (aktuellesEl=0;shmptr[aktuellesEl%buffersize]!='\0';aktuellesEl++) {
      if (P(semid_two) == -1) {
        cleanup(shmid, shmptr, semid_one, semid_two);
