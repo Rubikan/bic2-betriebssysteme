@@ -15,6 +15,7 @@
 
 #include "shared.h"
 #include "empfaenger.h"
+#include <string.h>
 
 /**
  * \brief main method of empfaenger
@@ -33,6 +34,18 @@ int main(int argc, char* argv[]) {
   uid_t uid;
   int aktuellesEl;
   char ch;
+  
+  if(argc < 2){	 
+    printf("Es wurde keine Buffersize angegeben!\n");
+    exit(EXIT_FAILURE);
+  } else if(argc > 2){
+	  if(!strcmp(argv[1],"-m")){
+		 if(argc > 3){
+			printf("Es wurde keine Buffersize angegeben!\n");
+			exit(EXIT_FAILURE);
+		 }
+	  }
+  }
   
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
