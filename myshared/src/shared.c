@@ -34,12 +34,26 @@ void print_usage() {
  */
 int parse_arguments(int argc, char* argv[]) {
   int opt;
+  int count = 0;
   int buffersize = -1;
 
+  if (argc < 2) {
+    printf("Es wurden zu wenig Argumente mitgegben!\n");
+    print_usage();
+    exit(EXIT_FAILURE);
+  }
+
   while ((opt = getopt(argc, argv, "m:")) != -1) {
+    if (count == 1) {
+      printf("Es wurden zu viele Argumente mitgegeben!\n");
+      print_usage();
+      exit(EXIT_FAILURE);
+    }
+
     switch(opt) {
       case 'm':
         buffersize = atoi(optarg);
+        count++;
         break;
       default:
         print_usage();
