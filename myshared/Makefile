@@ -23,6 +23,9 @@ shared: $(SRCDIR)/shared.h $(SRCDIR)/shared.c
 all: sender empfaenger shared
 	$(CC) $(OBJDIR)/sender.o $(OBJDIR)/shared.o -o $(BINDIR)/sender -lsem182
 	$(CC) $(OBJDIR)/empfaenger.o $(OBJDIR)/shared.o -o $(BINDIR)/empfaenger -lsem182
+	
+test:
+	/usr/local/bin/test_sender_empfaenger.sh -s ./bin/sender -e ./bin/empfaenger
 
 clean:
 	rm -f $(OBJDIR)/*.o
