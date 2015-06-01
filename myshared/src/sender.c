@@ -36,8 +36,8 @@ int main(int argc, char* argv[]) {
   uid_t uid;
   /*int maxElements;*/
   int aktuellesEl=0;
-  
-  if(argc < 2){	 
+
+  if(argc < 2){
     printf("Es wurde keine Buffersize angegeben!\n");
     exit(EXIT_FAILURE);
   } else if(argc > 2){
@@ -81,33 +81,27 @@ int main(int argc, char* argv[]) {
   }
 
   while(read(STDIN_FILENO, &ch, 1) > 0) {
-	/*printf("I am in the while.\n");
-	printf("char (%c)\n",ch);*/
-	
-
     if (P(semid_one) == -1) {
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
 
     /* Critical Section */
-	if(shmptr[aktuellesEl%buffersize]=='\0'){
-		shmptr[aktuellesEl%buffersize]=ch;	
-		/*printf("Char(%c) written, it is the %d. char, buffersize: %d.\n",ch,aktuellesEl,buffersize);*/
-		aktuellesEl++;
-	}
+	  if(shmptr[aktuellesEl%buffersize] == '\0'){
+		  shmptr[aktuellesEl%buffersize] = ch;
+		  aktuellesEl++;
+	  }
+
     if (V(semid_two) == -1) {
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
-	
   }
   /* Here EOF should be written to shared memory */
 
   /* Here cleanup needs to be called to delete/remove shared memory and semaphores */
-  
-  /*printf("CleanUp\n");
-  cleanup(shmid, shmptr, semid_one, semid_two);*/
-  
+
+  /* cleanup(shmid, shmptr, semid_one, semid_two); */
+
   return EXIT_SUCCESS;
 }
