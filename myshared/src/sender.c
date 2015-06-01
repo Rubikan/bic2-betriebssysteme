@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
     exit(EXIT_FAILURE);
   }
   /* Get ID to first semaphore */
-  if ((semid_one = seminit(semkey_one, 0660, 1)) == -1) {
+  if ((semid_one = seminit(semkey_one, 0660, buffersize)) == -1) {
     /* ERROR: Error when getting id of semaphore one */
     printf("Der erste Semaphor konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);

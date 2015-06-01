@@ -53,6 +53,8 @@ int main(int argc, char* argv[]) {
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
 
+  sleep(2);
+
   /* Get access to the already created shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
     /* ERROR: Shared memory is not existing */
