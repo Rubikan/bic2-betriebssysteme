@@ -21,8 +21,8 @@ shared: $(SRCDIR)/shared.h $(SRCDIR)/shared.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/shared.c -o $(OBJDIR)/shared.o
 
 all: sender empfaenger shared
-	$(CC) $(OBJDIR)/sender.o $(OBJDIR)/shared.o -o $(BINDIR)/sender
-	$(CC) $(OBJDIR)/empfaenger.o $(OBJDIR)/shared.o -o $(BINDIR)/empfaenger
+	$(CC) $(OBJDIR)/sender.o $(OBJDIR)/shared.o -o $(BINDIR)/sender -lsem182
+	$(CC) $(OBJDIR)/empfaenger.o $(OBJDIR)/shared.o -o $(BINDIR)/empfaenger -lsem182
 
 clean:
 	rm -f $(OBJDIR)/*.o
