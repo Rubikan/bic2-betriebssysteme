@@ -26,3 +26,6 @@ all: sender empfaenger shared
 
 clean:
 	rm -f $(OBJDIR)/*.o
+
+cleanresource:
+	sh ./removeResources.sh
