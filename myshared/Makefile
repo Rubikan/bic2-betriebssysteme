@@ -25,7 +25,7 @@ all: sender empfaenger shared
 	$(CC) $(OBJDIR)/empfaenger.o $(OBJDIR)/shared.o -o $(BINDIR)/empfaenger -lsem182
 
 test:
-	/usr/local/bin/test_sender_empfaenger.sh -s ./bin/sender -e ./bin/empfaenger
+	sh ./scripts/test_sender_empfaenger.sh -s ./bin/sender -e ./bin/empfaenger
 
 clean:
 	rm -f $(OBJDIR)/*.o
