@@ -27,7 +27,7 @@
 
 #define GET_KEY(uid, offset) ftok("/etc/hosts",(1000 * uid + offset))
 
-void print_usage(void);
+void print_usage(char* program);
 void cleanup(int shmid, int* shmptr, int semid_one, int semid_two);
 int parse_arguments(int argc, char* argv[]);
 

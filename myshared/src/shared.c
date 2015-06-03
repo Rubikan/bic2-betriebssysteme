@@ -20,8 +20,8 @@
  *
  * \return void
  */
-void print_usage() {
-    printf("Usage: [sender empfaenger] -m num\n");
+void print_usage(char* program) {
+    printf("Usage: %s -m number\n", program);
 }
 
 /**
@@ -36,11 +36,9 @@ int parse_arguments(int argc, char* argv[]) {
   int opt;
   int buffersize = -1;
 
-  printf("ARGC = %d\n", argc);
-
   if (argc != 2 && argc != 3) {
     printf("Die Anzahl der Argumente ist nicht korrekt!\n");
-    print_usage();
+    print_usage(argv[0]);
     exit(EXIT_FAILURE);
   }
 
@@ -51,9 +49,14 @@ int parse_arguments(int argc, char* argv[]) {
         buffersize = atoi(optarg);
         break;
       default:
-        print_usage();
+        print_usage(argv[0]);
         exit(EXIT_FAILURE);
     }
+  }
+
+  if (argc == 1 || argc > optind || optind > 3) {
+    print_usage(argv[0]);
+    exit(EXIT_FAILURE);
   }
 
   printf("Buffersize = %d\n", buffersize);
