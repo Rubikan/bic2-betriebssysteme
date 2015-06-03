@@ -52,7 +52,7 @@ int parse_arguments(int argc, char* argv[]) {
         const_optarg = (const char*) optarg;
         buffersize = strtoul(const_optarg, &after_num, 10);
 
-        if (errno == EINVAL || errno == ERANGE) {
+        if (errno == EINVAL || errno == ERANGE || *after_num != '\0') {
           printf("Fehler beim parsen des Optionsarguments\n");
           exit(EXIT_FAILURE);
         }
