@@ -121,3 +121,19 @@ void cleanup(int shmid, int* shmptr, int semid_one, int semid_two) {
     }
   }
 }
+
+/**
+ * \brief Handles all signals for sender and empfaenger
+ *
+ * \param signo number of the signal received.
+ *
+ * \return void
+ */
+void sig_handler(int signo) {
+  if (signo == SIGSTOP) {
+
+  }
+  if (signo == SIGCONT) {
+    
+  }
+}
