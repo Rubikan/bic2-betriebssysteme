@@ -34,6 +34,8 @@ void print_usage(char* program) {
  */
 int parse_arguments(int argc, char* argv[]) {
   int opt;
+  char* after_num;
+  const char* const_optarg;
   int buffersize = -1;
 
   if (argc != 2 && argc != 3) {
@@ -46,7 +48,18 @@ int parse_arguments(int argc, char* argv[]) {
 
     switch(opt) {
       case 'm':
-        buffersize = atoi(optarg);
+        errno = 0;
+        const_optarg = (const char*) optarg;
+        buffersize = strtoul(const_optarg, &after_num, 10);
+
+        if (errno == EINVAL || errno == ERANGE) {
+          printf("Fehler beim parsen des Optionsarguments\n");
+          exit(EXIT_FAILURE);
+        }
+        if (buffersize < 1) {
+          printf("Buffersize muss ein Wert >= 1 sein\n");
+          exit(EXIT_FAILURE);
+        }
         break;
       default:
         print_usage(argv[0]);
