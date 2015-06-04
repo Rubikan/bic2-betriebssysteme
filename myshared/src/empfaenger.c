@@ -112,8 +112,7 @@ int main(int argc, char* argv[]) {
 
      /* Critical section begin */
 	   /* write shmptr[aktuellesEl%buffersize] into output file descriptor */
-	   if (shmptr[aktuellesEl%buffersize] != 300) {
-		 printf("aktuellesEl: %d",aktuellesEl);
+	   if (shmptr[aktuellesEl%buffersize] != 256) {
 	     ch = shmptr[aktuellesEl%buffersize];
 	     shmptr[aktuellesEl%buffersize] = '\0';
 	     if (write(STDOUT_FILENO, &ch, 1) == -1) {

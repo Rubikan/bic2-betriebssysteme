@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
 
     /* Critical Section */
 	  if(shmptr[aktuellesEl%buffersize] == '\0'){
-		  shmptr[aktuellesEl%buffersize] = 300;
+		  shmptr[aktuellesEl%buffersize] = 256;
 		  aktuellesEl++;
 	  }
 
