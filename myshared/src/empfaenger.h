@@ -16,4 +16,6 @@
 #ifndef EMPFAENGER_H
 #define EMPFAENGER_H
 
+void timestamp(void);
+
 #endif

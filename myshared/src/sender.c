@@ -16,6 +16,7 @@
 #include "shared.h"
 #include "sender.h"
 #include <string.h>
+#include <time.h>
 
 
 /**
@@ -34,7 +35,7 @@ int main(int argc, char* argv[]) {
   key_t semkey_one;
   key_t semkey_two;
   uid_t uid;
-  int aktuellesEl = 0;
+  int aktuellesEl = 0;  
 
   buffersize = parse_arguments(argc, argv);
   uid = getuid();
@@ -42,33 +43,62 @@ int main(int argc, char* argv[]) {
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
 
-  /* Create shared memory */
-  if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
-    /* ERROR: Shared memory already exists or couldn't be created */
-    printf("Shared Memory wurde schon angelegt oder konnte nicht angelegt werden!\n");
-    exit(EXIT_FAILURE);
-  }
-  /* Get pointer to the shared memory */
-  if ((shmptr = shmat(shmid, NULL, 0)) == (int*) -1) {
-    /* ERROR: Error when getting pointer to shared memory */
-    printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n");
-    exit(EXIT_FAILURE);
-  }
+  
   /* Get ID to first semaphore */
+  if ((semid_one = semgrab(semkey_one)) == -1) {
   if ((semid_one = seminit(semkey_one, 0660, buffersize)) == -1) {
     /* ERROR: Error when getting id of semaphore one */
     printf("Der erste Semaphor konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);
   }
+  }
   /* Get ID to second semaphore */
+  if ((semid_two = semgrab(semkey_two)) == -1) {
   if ((semid_two = seminit(semkey_two, 0660, 0)) == -1) {
     /* ERROR: Error when getting id of semaphore two */
     printf("Der zweite Semaphor konnte nicht angelegt werden!\n");
     exit(EXIT_FAILURE);
   }
+  }
+  
+  
+    if (P(semid_one) == -1) {
+	  printf("cleanup: 1"); 
+      cleanup(-1, NULL, semid_one, semid_two);
+      exit(EXIT_FAILURE);
+    }
+  /* Create shared memory */  
+  if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
+	  printf("shared memory exists not sen, shmkey: %d\n", shmkey); 
+  if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
+    /* ERROR: Shared memory already exists or couldn't be created */
+    printf("Shared Memory wurde schon angelegt oder konnte nicht angelegt werden!\n");
+    exit(EXIT_FAILURE);
+  }
+  }
+  /* Get pointer to the shared memory */
+  
+  if ((shmptr = shmat(shmid, NULL, 1)) == (int*) -1) {
+    /* ERROR: Error when getting pointer to shared memory */
+    printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n");
+    exit(EXIT_FAILURE);
+  }  
+
+    if (V(semid_two) == -1) {
+	  printf("cleanup: 2"); 
+      cleanup(shmid, shmptr, semid_one, semid_two);
+      exit(EXIT_FAILURE);
+    }
 
   while(read(STDIN_FILENO, &ch, 1) > 0) {
+	  
+  if ((semid_one = semgrab(semkey_one)) == -1) {
+	  printf("ch: %d\n",aktuellesEl);
+	  printf("semkey one not here\n"); 	  
+  }
     if (P(semid_one) == -1) {
+	  timestamp();
+	  printf("cleanup: 3\n"); 
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
@@ -80,15 +110,43 @@ int main(int argc, char* argv[]) {
 	  }
 
     if (V(semid_two) == -1) {
+	  printf("cleanup: 4\n"); 
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
   }
+  
+  
   /* Here EOF should be written to shared memory */
+    if (P(semid_one) == -1) {
+	  timestamp();
+	  printf("cleanup: 5\n"); 
+      cleanup(shmid, shmptr, semid_one, semid_two);
+      exit(EXIT_FAILURE);
+    }
+
+    /* Critical Section */
+	  if(shmptr[aktuellesEl%buffersize] == '\0'){
+		  shmptr[aktuellesEl%buffersize] = 300;
+		  aktuellesEl++;
+	  }
+
+    if (V(semid_two) == -1) {
+	  printf("cleanup: 6"); 
+      cleanup(shmid, shmptr, semid_one, semid_two);
+      exit(EXIT_FAILURE);
+    }
 
   /* Here cleanup needs to be called to delete/remove shared memory and semaphores */
 
   /* cleanup(shmid, shmptr, semid_one, semid_two); */
 
   return EXIT_SUCCESS;
+}
+
+void timestamp()
+{
+    time_t ltime; /* calendar time */
+    ltime=time(NULL); /* get current cal time */
+    printf("%s",asctime( localtime(&ltime) ) );
 }
