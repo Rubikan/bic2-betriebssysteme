@@ -116,7 +116,7 @@ int main(int argc, char* argv[]) {
       exit(EXIT_FAILURE);
     }
   }
-  /* */
+  /* Printing 256 as EOF indicator to shared memory */
   if (P(semid_one) == -1) {
 	  timestamp();
 	  printf("cleanup: 5\n");
