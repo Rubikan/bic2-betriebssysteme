@@ -92,12 +92,6 @@ int main(int argc, char* argv[]) {
   }
   /* Loop that reads from STDIN and writes it to the shared memory */
   while(read(STDIN_FILENO, &ch, 1) > 0) {
-    /* Loop for pausing the process */
-    do {
-      errno = 0;
-      P(semid_one);
-    } while (errno == EINTR);
-
     if ((semid_one = semgrab(semkey_one)) == -1) {
 	    printf("ch: %d\n",aktuellesEl);
 	    printf("semkey one not here\n");

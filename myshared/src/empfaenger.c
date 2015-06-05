@@ -94,15 +94,9 @@ int main(int argc, char* argv[]) {
   }
 
   do {
-    /* Loop for pausing the process */
-    do {
-      errno = 0;
-      P(semid_two);
-    } while (errno == EINTR);
-
-	  aktuellesEl++;
+    aktuellesEl++;
     if (P(semid_two) == -1) {
-	    printf("cleanup: 3");
+      printf("cleanup: 3");
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
