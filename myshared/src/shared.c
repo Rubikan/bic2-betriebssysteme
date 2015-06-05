@@ -72,7 +72,7 @@ int parse_arguments(int argc, char* argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  printf("Buffersize = %d\n", buffersize);
+  /* printf("Buffersize = %d\n", buffersize); */
 
   return buffersize;
 }
@@ -134,6 +134,6 @@ void sig_handler(int signo) {
 
   }
   if (signo == SIGCONT) {
-    
+
   }
 }
