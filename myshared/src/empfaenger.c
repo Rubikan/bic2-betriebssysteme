@@ -100,12 +100,33 @@ int main(int argc, char* argv[]) {
       P(semid_two);
     } while (errno == EINTR);*/
 
+	
+    do {
+      errno = 0;   
+	  if (P(semid_two) == -1) {
+		if(errno != EINTR){
+			timestamp();
+			printf("cleanup: 3(do while)\n");
+			cleanup(shmid, shmptr, semid_one, semid_two);
+			exit(EXIT_FAILURE);
+		}
+	  }
+	  if(errno == EINTR){
+		 printf("do while; errno == EINTR\n");
+		 if (V(semid_two) == -1) {
+			printf("cleanup: 4(do while)\n");
+			cleanup(shmid, shmptr, semid_one, semid_two);
+			exit(EXIT_FAILURE);
+		 }		  
+	  }
+    } while (errno == EINTR);
+	
 	  aktuellesEl++;
-    if (P(semid_two) == -1) {
+    /*if (P(semid_two) == -1) {
 	    printf("cleanup: 3");
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
-    }
+    }*/
 
     /* Critical section begin */
 	  if (shmptr[aktuellesEl%buffersize] != 256) {

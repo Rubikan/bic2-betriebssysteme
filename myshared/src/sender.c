@@ -35,12 +35,14 @@ int main(int argc, char* argv[]) {
   key_t semkey_two;
   uid_t uid;
   int aktuellesEl = 0;
+  int countSemOne=0;
 
   buffersize = parse_arguments(argc, argv);
   uid = getuid();
   shmkey = GET_KEY(uid, 0);
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
+  countSemOne=buffersize;
 
   /* Register signal handlers */
   /*signal(SIGSTOP, sig_handler);
@@ -95,22 +97,39 @@ int main(int argc, char* argv[]) {
   /* Loop that reads from STDIN and writes it to the shared memory */
   while(read(STDIN_FILENO, &ch, 1) > 0) {
     /* Loop for pausing the process */
-    /*do {
-      errno = 0;
-      P(semid_one);
-    } while (errno == EINTR);*/
+    do {
+      errno = 0;    
+	  /*printf("before grab sem one during do while\n");
+	  if ((semid_one = semgrab(semkey_one)) == -1) {
+		  printf("was not able to grab sem one during do while\n");
+	  }
+      if ((semid_one = semgrab(semkey_one)) == -1) {
+	      printf("ch: %d\n",aktuellesEl);
+	      printf("semkey one not here\n");
+      }*/
+	  if (P(semid_one) == -1) {
+		if(errno == EINTR){
+			/*if ((semid_one = semgrab(semkey_one)) == -1) {
+				printf("was not able to grab sem one during do while\n");			
+			}*/
+		}else{
+		timestamp();
+		printf("cleanup: 3(do while)\n");
+		cleanup(shmid, shmptr, semid_one, semid_two);
+		exit(EXIT_FAILURE);
+		}
+	  }
+	  if(errno == EINTR){
+		 printf("do while; errno == EINTR\n");
+		 if (V(semid_one) == -1) {
+			printf("cleanup: 4(do while)\n");
+			cleanup(shmid, shmptr, semid_one, semid_two);
+			exit(EXIT_FAILURE);
+		 }		  
+	  }
+    } while (errno == EINTR);
 
-    if ((semid_one = semgrab(semkey_one)) == -1) {
-	    printf("ch: %d\n",aktuellesEl);
-	    printf("semkey one not here\n");
-    }
 
-    if (P(semid_one) == -1) {
-      timestamp();
-	    printf("cleanup: 3\n");
-      cleanup(shmid, shmptr, semid_one, semid_two);
-      exit(EXIT_FAILURE);
-    }
 
     /* Critical Section */
 	  if(shmptr[aktuellesEl % buffersize] == '\0'){
@@ -119,15 +138,15 @@ int main(int argc, char* argv[]) {
 	  }
 
     if (V(semid_two) == -1) {
-	    printf("cleanup: 4\n");
+	  printf("cleanup: 4\n");
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
   }
   /* */
   if (P(semid_one) == -1) {
-	  timestamp();
-	  printf("cleanup: 5\n");
+	timestamp();
+	printf("cleanup: 5\n");
     cleanup(shmid, shmptr, semid_one, semid_two);
     exit(EXIT_FAILURE);
   }
