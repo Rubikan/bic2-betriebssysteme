@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
     exit(EXIT_FAILURE);
   }
   /* Loop that reads from STDIN and writes it to the shared memory */
-  while((ch = getc(stdin)) > 0) {
+  while((ch = getc(stdin)) != -1) {
     /* Loop for pausing the process */
     do {
       errno = 0;    
@@ -130,6 +130,7 @@ int main(int argc, char* argv[]) {
   if (shmptr[aktuellesEl % buffersize] == '\0') {
     shmptr[aktuellesEl % buffersize] = 256;
     aktuellesEl++;
+	printf("aktuellesEl: %d\n",aktuellesEl);
   }
 
   if (V(semid_two) == -1) {

@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
   key_t semkey_two;
   uid_t uid;
   int aktuellesEl=-1;
-  char ch;
+  int ch;
   int hasNext=1;
 
   buffersize = parse_arguments(argc, argv);
