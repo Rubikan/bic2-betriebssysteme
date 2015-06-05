@@ -14,7 +14,6 @@
  */
 
 #include "shared.h"
-#include "empfaenger.h"
 
 /**
  * \brief main method of empfaenger
@@ -41,10 +40,6 @@ int main(int argc, char* argv[]) {
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
 
-  /* Register signal handlers */
-  /*signal(SIGSTOP, sig_handler);
-  signal(SIGCONT, sig_handler);*/
-
   /* Get ID to first semaphore */
   if ((semid_one = semgrab(semkey_one)) == -1) {
     if ((semid_one = seminit(semkey_one, 0660, buffersize)) == -1) {
@@ -64,13 +59,12 @@ int main(int argc, char* argv[]) {
   }
 
   if (P(semid_two) == -1) {
-	  printf("cleanup: 1");
+    printf("cleanup: 1");
     cleanup(-1, NULL, semid_one, semid_two);
     exit(EXIT_FAILURE);
   }
   /* Create shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
-	  /* printf("shared memory exists not emp, shmkey: %d\n", shmkey); */
     if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
       /* ERROR: Shared memory already exists or couldn't be created */
       printf("Shared Memory wurde schon angelegt oder konnte nicht angelegt werden!\n");
@@ -86,69 +80,52 @@ int main(int argc, char* argv[]) {
   }
 
   if (V(semid_one) == -1) {
-	  printf("cleanup: 2");
+    printf("cleanup: 2");
     cleanup(shmid, shmptr, semid_one, semid_two);
     exit(EXIT_FAILURE);
   }
 
   do {
-    /* Loop for pausing the process */
-    /*do {
-      errno = 0;
-      P(semid_two);
-    } while (errno == EINTR);*/
-
-	
     do {
       errno = 0;   
-	  if (P(semid_two) == -1) {
-		if(errno != EINTR){
-			timestamp();
-			printf("cleanup: 3(do while)\n");
-			cleanup(shmid, shmptr, semid_one, semid_two);
-			exit(EXIT_FAILURE);
-		}
-	  }
-	  if(errno == EINTR){
-		 /* printf("do while; errno == EINTR\n"); */
-		 if (V(semid_two) == -1) {
-			printf("cleanup: 4(do while)\n");
-			cleanup(shmid, shmptr, semid_one, semid_two);
-			exit(EXIT_FAILURE);
-		 }		  
-	  }
+      if (P(semid_two) == -1) {
+        if(errno != EINTR){
+        cleanup(shmid, shmptr, semid_one, semid_two);
+        exit(EXIT_FAILURE);
+        }
+      }
+      if(errno == EINTR){
+        /* printf("do while; errno == EINTR\n"); */
+        if (V(semid_two) == -1) {
+          printf("cleanup: 4(do while)\n");
+          cleanup(shmid, shmptr, semid_one, semid_two);
+          exit(EXIT_FAILURE);
+        }     
+      }
     } while (errno == EINTR);
-	
-	  aktuellesEl++;
-    /*if (P(semid_two) == -1) {
-	    printf("cleanup: 3");
-      cleanup(shmid, shmptr, semid_one, semid_two);
-      exit(EXIT_FAILURE);
-    }*/
+  
+    aktuellesEl++;
 
     /* Critical section begin */
-	  if (shmptr[aktuellesEl%buffersize] != 256) {
-	    ch = shmptr[aktuellesEl%buffersize];
-	    shmptr[aktuellesEl%buffersize] = '\0';
-	    /*if (write(STDOUT_FILENO, &ch, 1) == -1) {*/
-	    if (putc(ch, stdout) == -1) {
-			  printf("Fehler beim Schreiben auf STDOUT! Errno: %d", errno);
-			  exit(EXIT_FAILURE);
+    if (shmptr[aktuellesEl % buffersize] != 256) {
+      ch = shmptr[aktuellesEl % buffersize];
+      shmptr[aktuellesEl  buffersize] = '\0';
+      if (putc(ch, stdout) == -1) {
+        printf("Fehler beim Schreiben auf STDOUT! Errno: %d", errno);
+        exit(EXIT_FAILURE);
       }
-	  } else {
-		  /* printf("\ngot EOF\n"); */
-		  hasNext = 0;
-	  }
-	  /* Critical section end*/
+    } else {
+      hasNext = 0;
+    }
+    /* Critical section end*/
 
     if (V(semid_one) == -1) {
-	    printf("cleanup: 4");
+      printf("cleanup: 4");
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
   } while(hasNext);
 
-  /* printf("cleanup: 5"); */
   cleanup(shmid, shmptr, semid_one, semid_two);
   return EXIT_SUCCESS;
 }

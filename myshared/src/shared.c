@@ -122,22 +122,6 @@ void cleanup(int shmid, int* shmptr, int semid_one, int semid_two) {
 }
 
 /**
- * \brief Handles all signals for sender and empfaenger
- *
- * \param signo number of the signal received.
- *
- * \return void
- */
-void sig_handler(int signo) {
-  if (signo == SIGSTOP) {
-    errno = EINTR;
-  }
-  if (signo == SIGCONT) {
-    errno = 0;
-  }
-}
-
-/**
  * \brief Prints a current timestamp for debugging purposes
  *
  * \return void
