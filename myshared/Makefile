@@ -30,5 +30,5 @@ test:
 clean:
 	rm -f $(OBJDIR)/*.o
 
-cleanresource:
-	sh ./scripts/removeResources.sh
+cleanres:
+	bash ./scripts/remove_Resources.sh

@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
 
   /* Create shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
-	  printf("shared memory exists not sen, shmkey: %d\n", shmkey);
+	  /* printf("shared memory exists not sen, shmkey: %d\n", shmkey);*/
     if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
       /* ERROR: Shared memory already exists or couldn't be created */
       printf("Shared Memory wurde schon angelegt oder konnte nicht angelegt werden!\n");
@@ -93,7 +93,8 @@ int main(int argc, char* argv[]) {
     exit(EXIT_FAILURE);
   }
   /* Loop that reads from STDIN and writes it to the shared memory */
-  while(read(STDIN_FILENO, &ch, 1) > 0) {
+  /* while(read(STDIN_FILENO, &ch, 1) > 0) { */
+  while((ch = getc(stdin)) > 0) {
     /* Loop for pausing the process */
     do {
       errno = 0;    

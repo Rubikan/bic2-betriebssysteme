@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
   }
   /* Create shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
-	  printf("shared memory exists not emp, shmkey: %d\n", shmkey);
+	  /* printf("shared memory exists not emp, shmkey: %d\n", shmkey); */
     if ((shmid = shmget(shmkey, buffersize, 0660|IPC_CREAT|IPC_EXCL)) == -1) {
       /* ERROR: Shared memory already exists or couldn't be created */
       printf("Shared Memory wurde schon angelegt oder konnte nicht angelegt werden!\n");
@@ -130,7 +130,8 @@ int main(int argc, char* argv[]) {
 	  if (shmptr[aktuellesEl%buffersize] != 256) {
 	    ch = shmptr[aktuellesEl%buffersize];
 	    shmptr[aktuellesEl%buffersize] = '\0';
-	    if (write(STDOUT_FILENO, &ch, 1) == -1) {
+	    /*if (write(STDOUT_FILENO, &ch, 1) == -1) {*/
+	    if (putc(ch, stdout) == -1) {
 			  printf("Fehler beim Schreiben auf STDOUT! Errno: %d", errno);
 			  exit(EXIT_FAILURE);
       }
