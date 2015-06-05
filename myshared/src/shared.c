@@ -45,7 +45,6 @@ int parse_arguments(int argc, char* argv[]) {
   }
 
   while ((opt = getopt(argc, argv, "m:")) != -1) {
-
     switch(opt) {
       case 'm':
         errno = 0;
@@ -131,9 +130,9 @@ void cleanup(int shmid, int* shmptr, int semid_one, int semid_two) {
  */
 void sig_handler(int signo) {
   if (signo == SIGSTOP) {
-
+    errno = EINTR;
   }
   if (signo == SIGCONT) {
-
+    errno = 0;
   }
 }

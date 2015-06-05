@@ -42,6 +42,10 @@ int main(int argc, char* argv[]) {
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
 
+  /* Register signal handlers */
+  signal(SIGSTOP, sig_handler);
+  signal(SIGCONT, sig_handler);
+
   /* Get ID to first semaphore */
   if ((semid_one = semgrab(semkey_one)) == -1) {
     if ((semid_one = seminit(semkey_one, 0660, buffersize)) == -1) {
@@ -88,12 +92,19 @@ int main(int argc, char* argv[]) {
     cleanup(shmid, shmptr, semid_one, semid_two);
     exit(EXIT_FAILURE);
   }
-
+  /* Loop that reads from STDIN and writes it to the shared memory */
   while(read(STDIN_FILENO, &ch, 1) > 0) {
+    /* Loop for pausing the process */
+    do {
+      errno = 0;
+      P(semid_one);
+    } while (errno == EINTR);
+
     if ((semid_one = semgrab(semkey_one)) == -1) {
 	    printf("ch: %d\n",aktuellesEl);
 	    printf("semkey one not here\n");
     }
+
     if (P(semid_one) == -1) {
       timestamp();
 	    printf("cleanup: 3\n");
@@ -102,18 +113,18 @@ int main(int argc, char* argv[]) {
     }
 
     /* Critical Section */
-	  if(shmptr[aktuellesEl%buffersize] == '\0'){
-		  shmptr[aktuellesEl%buffersize] = ch;
+	  if(shmptr[aktuellesEl % buffersize] == '\0'){
+		  shmptr[aktuellesEl % buffersize] = ch;
 		  aktuellesEl++;
 	  }
 
     if (V(semid_two) == -1) {
-	  printf("cleanup: 4\n");
+	    printf("cleanup: 4\n");
       cleanup(shmid, shmptr, semid_one, semid_two);
       exit(EXIT_FAILURE);
     }
   }
-
+  /* */
   if (P(semid_one) == -1) {
 	  timestamp();
 	  printf("cleanup: 5\n");
@@ -132,10 +143,6 @@ int main(int argc, char* argv[]) {
     cleanup(shmid, shmptr, semid_one, semid_two);
     exit(EXIT_FAILURE);
   }
-
-  /* Here cleanup needs to be called to delete/remove shared memory and semaphores */
-
-  /* cleanup(shmid, shmptr, semid_one, semid_two); */
 
   return EXIT_SUCCESS;
 }
