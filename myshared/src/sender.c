@@ -15,8 +15,6 @@
 
 #include "shared.h"
 #include "sender.h"
-#include <string.h>
-#include <time.h>
 
 /**
  * \brief main method of sender
@@ -143,7 +141,7 @@ int main(int argc, char* argv[]) {
       exit(EXIT_FAILURE);
     }
   }
-  /* */
+  /* Printing 256 as EOF indicator to shared memory */
   if (P(semid_one) == -1) {
 	timestamp();
 	printf("cleanup: 5\n");
@@ -164,10 +162,4 @@ int main(int argc, char* argv[]) {
   }
 
   return EXIT_SUCCESS;
-}
-
-void timestamp() {
-  time_t ltime; /* calendar time */
-  ltime=time(NULL); /* get current cal time */
-  printf("%s",asctime( localtime(&ltime) ) );
 }

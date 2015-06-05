@@ -16,8 +16,10 @@
 #ifndef SHARED_H
 #define SHARED_H
 
+#include <time.h>
 #include <stdio.h>
 #include <errno.h>
+#include <string.h>
 #include <signal.h>
 #include <sem182.h>
 #include <stdlib.h>
@@ -28,6 +30,7 @@
 
 #define GET_KEY(uid, offset) ftok("/etc/hosts",(1000 * uid + offset))
 
+void timestamp(void);
 void sig_handler(int signo);
 void print_usage(char* program);
 void cleanup(int shmid, int* shmptr, int semid_one, int semid_two);

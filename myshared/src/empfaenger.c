@@ -15,8 +15,6 @@
 
 #include "shared.h"
 #include "empfaenger.h"
-#include <string.h>
-#include <time.h>
 
 /**
  * \brief main method of empfaenger
@@ -152,10 +150,4 @@ int main(int argc, char* argv[]) {
   /* printf("cleanup: 5"); */
   cleanup(shmid, shmptr, semid_one, semid_two);
   return EXIT_SUCCESS;
-}
-
-void timestamp() {
-  time_t ltime; /* calendar time */
-  ltime=time(NULL); /* get current cal time */
-  printf("%s",asctime( localtime(&ltime) ) );
 }
