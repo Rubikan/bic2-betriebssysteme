@@ -43,8 +43,8 @@ int main(int argc, char* argv[]) {
   semkey_two = GET_KEY(uid, 2);
 
   /* Register signal handlers */
-  signal(SIGSTOP, sig_handler);
-  signal(SIGCONT, sig_handler);
+  /*signal(SIGSTOP, sig_handler);
+  signal(SIGCONT, sig_handler);*/
 
   /* Get ID to first semaphore */
   if ((semid_one = semgrab(semkey_one)) == -1) {
@@ -95,10 +95,10 @@ int main(int argc, char* argv[]) {
   /* Loop that reads from STDIN and writes it to the shared memory */
   while(read(STDIN_FILENO, &ch, 1) > 0) {
     /* Loop for pausing the process */
-    do {
+    /*do {
       errno = 0;
       P(semid_one);
-    } while (errno == EINTR);
+    } while (errno == EINTR);*/
 
     if ((semid_one = semgrab(semkey_one)) == -1) {
 	    printf("ch: %d\n",aktuellesEl);
