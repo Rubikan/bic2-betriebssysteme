@@ -11,10 +11,10 @@ GREP		= grep
 
 default: all
 
-sender: $(SRCDIR)/shared.h $(SRCDIR)/sender.h $(SRCDIR)/sender.c
+sender: $(SRCDIR)/shared.h $(SRCDIR)/sender.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/sender.c -o $(OBJDIR)/sender.o
 
-empfaenger: $(SRCDIR)/shared.h $(SRCDIR)/empfaenger.h $(SRCDIR)/empfaenger.c
+empfaenger: $(SRCDIR)/shared.h $(SRCDIR)/empfaenger.c
 	$(CC) $(CFLAGS) -c $(SRCDIR)/empfaenger.c -o $(OBJDIR)/empfaenger.o
 
 shared: $(SRCDIR)/shared.h $(SRCDIR)/shared.c
