@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
     /* Critical section begin */
     if (shmptr[aktuellesEl % buffersize] != 256) {
       ch = shmptr[aktuellesEl % buffersize];
-      shmptr[aktuellesEl  buffersize] = '\0';
+      shmptr[aktuellesEl % buffersize] = '\0';
       if (putc(ch, stdout) == -1) {
         printf("Fehler beim Schreiben auf STDOUT! Errno: %d", errno);
         exit(EXIT_FAILURE);
