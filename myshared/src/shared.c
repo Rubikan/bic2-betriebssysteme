@@ -136,3 +136,14 @@ void sig_handler(int signo) {
     errno = 0;
   }
 }
+
+/**
+ * \brief Prints a current timestamp for debugging purposes
+ *
+ * \return void
+ */
+void timestamp() {
+  time_t ltime; /* calendar time */
+  ltime = time(NULL); /* get current cal time */
+  printf("%s",asctime( localtime(&ltime) ) );
+}

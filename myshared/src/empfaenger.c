@@ -95,10 +95,10 @@ int main(int argc, char* argv[]) {
 
   do {
     /* Loop for pausing the process */
-    /*do {
+    do {
       errno = 0;
       P(semid_two);
-    } while (errno == EINTR);*/
+    } while (errno == EINTR);
 
 	  aktuellesEl++;
     if (P(semid_two) == -1) {
@@ -131,10 +131,4 @@ int main(int argc, char* argv[]) {
   /* printf("cleanup: 5"); */
   cleanup(shmid, shmptr, semid_one, semid_two);
   return EXIT_SUCCESS;
-}
-
-void timestamp() {
-  time_t ltime; /* calendar time */
-  ltime=time(NULL); /* get current cal time */
-  printf("%s",asctime( localtime(&ltime) ) );
 }

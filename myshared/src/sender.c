@@ -15,8 +15,6 @@
 
 #include "shared.h"
 #include "sender.h"
-#include <string.h>
-#include <time.h>
 
 /**
  * \brief main method of sender
@@ -95,10 +93,10 @@ int main(int argc, char* argv[]) {
   /* Loop that reads from STDIN and writes it to the shared memory */
   while(read(STDIN_FILENO, &ch, 1) > 0) {
     /* Loop for pausing the process */
-    /*do {
+    do {
       errno = 0;
       P(semid_one);
-    } while (errno == EINTR);*/
+    } while (errno == EINTR);
 
     if ((semid_one = semgrab(semkey_one)) == -1) {
 	    printf("ch: %d\n",aktuellesEl);
@@ -145,10 +143,4 @@ int main(int argc, char* argv[]) {
   }
 
   return EXIT_SUCCESS;
-}
-
-void timestamp() {
-  time_t ltime; /* calendar time */
-  ltime=time(NULL); /* get current cal time */
-  printf("%s",asctime( localtime(&ltime) ) );
 }
