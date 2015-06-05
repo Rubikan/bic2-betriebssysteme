@@ -42,7 +42,6 @@ int main(int argc, char* argv[]) {
   semkey_one = GET_KEY(uid, 1);
   semkey_two = GET_KEY(uid, 2);
 
-
   /* Get ID to first semaphore */
   if ((semid_one = semgrab(semkey_one)) == -1) {
     if ((semid_one = seminit(semkey_one, 0660, buffersize)) == -1) {
@@ -51,6 +50,7 @@ int main(int argc, char* argv[]) {
       exit(EXIT_FAILURE);
     }
   }
+
   /* Get ID to second semaphore */
   if ((semid_two = semgrab(semkey_two)) == -1) {
     if ((semid_two = seminit(semkey_two, 0660, 0)) == -1) {
@@ -60,12 +60,12 @@ int main(int argc, char* argv[]) {
     }
   }
 
-
   if (P(semid_one) == -1) {
 	  printf("cleanup: 1");
     cleanup(-1, NULL, semid_one, semid_two);
     exit(EXIT_FAILURE);
   }
+
   /* Create shared memory */
   if ((shmid = shmget(shmkey, buffersize, 0660)) == -1) {
 	  printf("shared memory exists not sen, shmkey: %d\n", shmkey);
@@ -75,6 +75,7 @@ int main(int argc, char* argv[]) {
       exit(EXIT_FAILURE);
     }
   }
+
   /* Get pointer to the shared memory */
   if ((shmptr = shmat(shmid, NULL, 1)) == (int*) -1) {
     /* ERROR: Error when getting pointer to shared memory */

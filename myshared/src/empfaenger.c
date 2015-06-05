@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
       exit(EXIT_FAILURE);
     }
   }
+  
   /* Get ID to second semaphore */
   if ((semid_two = semgrab(semkey_two)) == -1) {
     if ((semid_two = seminit(semkey_two, 0660, 0)) == -1) {
@@ -74,8 +75,8 @@ int main(int argc, char* argv[]) {
       exit(EXIT_FAILURE);
     }
   }
-  /* Get pointer to the shared memory */
 
+  /* Get pointer to the shared memory */
   if ((shmptr = shmat(shmid, NULL, 0)) == (int*) -1) {
     /* ERROR: Error when getting pointer to shared memory */
     printf("Der Pointer auf den Shared Memory konnte nicht angelegt werden!\n");
@@ -92,7 +93,7 @@ int main(int argc, char* argv[]) {
   do {
 	 aktuellesEl++;
      if (P(semid_two) == -1) {
-	  printf("cleanup: 3");
+	     printf("cleanup: 3");
        cleanup(shmid, shmptr, semid_one, semid_two);
        exit(EXIT_FAILURE);
      }
@@ -103,30 +104,29 @@ int main(int argc, char* argv[]) {
 	     ch = shmptr[aktuellesEl%buffersize];
 	     shmptr[aktuellesEl%buffersize] = '\0';
 	     if (write(STDOUT_FILENO, &ch, 1) == -1) {
-			printf("Fehler beim Schreiben auf STDOUT! Errno: %d", errno);
-			exit(EXIT_FAILURE);
-         }
-	   }else{
-		   printf("\ngot EOF\n");
+			   printf("Fehler beim Schreiben auf STDOUT! Errno: %d", errno);
+			   exit(EXIT_FAILURE);
+       }
+	   } else {
+		   /* printf("\ngot EOF\n"); */
 		   hasNext = 0;
 	   }
 	   /* Critical section end*/
 
      if (V(semid_one) == -1) {
-	   printf("cleanup: 4");
+	     printf("cleanup: 4");
        cleanup(shmid, shmptr, semid_one, semid_two);
        exit(EXIT_FAILURE);
      }
   } while(hasNext);
-  /*while (shmptr[aktuellesEl%buffersize]!='\0');*/
 
-  printf("cleanup: 5");
+  /* printf("cleanup: 5"); */
   cleanup(shmid, shmptr, semid_one, semid_two);
   return EXIT_SUCCESS;
 }
 
 void timestamp() {
-    time_t ltime; /* calendar time */
-    ltime=time(NULL); /* get current cal time */
-    printf("%s",asctime( localtime(&ltime) ) );
+  time_t ltime; /* calendar time */
+  ltime=time(NULL); /* get current cal time */
+  printf("%s",asctime( localtime(&ltime) ) );
 }
