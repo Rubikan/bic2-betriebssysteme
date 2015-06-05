@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
 		}
 	  }
 	  if(errno == EINTR){
-		 printf("do while; errno == EINTR\n");
+		 /* printf("do while; errno == EINTR\n"); */
 		 if (V(semid_two) == -1) {
 			printf("cleanup: 4(do while)\n");
 			cleanup(shmid, shmptr, semid_one, semid_two);

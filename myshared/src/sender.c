@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
   int semid_one;
   int semid_two;
   int* shmptr;
-  char ch;
+  int ch;
   key_t shmkey;
   key_t semkey_one;
   key_t semkey_two;
@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
 		}
 	  }
 	  if(errno == EINTR){
-		 printf("do while; errno == EINTR\n");
+		 /* printf("do while; errno == EINTR\n"); */
 		 if (V(semid_one) == -1) {
 			printf("cleanup: 4(do while)\n");
 			cleanup(shmid, shmptr, semid_one, semid_two);
